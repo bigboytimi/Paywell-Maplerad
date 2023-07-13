@@ -3,6 +3,7 @@ package com.example.demomaplerad.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,7 +16,7 @@ import java.util.Set;
 @Getter
 @Entity
 @Table(name = "customer")
-public class Customer extends BaseEntity {
+public class Customer extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private String customer_id;
@@ -43,4 +44,8 @@ public class Customer extends BaseEntity {
             joinColumns = @JoinColumn(name = "customer_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+
+
+
 }

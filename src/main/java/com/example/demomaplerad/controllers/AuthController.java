@@ -22,9 +22,6 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<String> registerUser(@Valid @RequestBody SignupRequest request){
-        if(customerRepository.existsByCustomerName(request.getFirstName())){
-            return new ResponseEntity<>("Error: Username already exists!", HttpStatus.BAD_REQUEST);
-        }
         if(customerRepository.existsByEmail(request.getEmail())){
             return new ResponseEntity<>("Error: Email already exists!", HttpStatus.BAD_REQUEST);
         }

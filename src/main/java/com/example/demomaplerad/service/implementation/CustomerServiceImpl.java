@@ -76,7 +76,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public LoginResponse loginUser(LoginRequest request) {
         Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+                .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
