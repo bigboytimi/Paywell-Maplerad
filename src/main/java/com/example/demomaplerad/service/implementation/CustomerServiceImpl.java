@@ -46,27 +46,17 @@ public class CustomerServiceImpl implements CustomerService {
                 .identification_number(request.getIdentification_number())
                 .build();
 
-        Set<String> strRoles = request.getRole();
+        String strRoles = request.getRole();
         Set<Role> roles = new HashSet<>();
 
-        if(strRoles == null){
+       if(strRoles.equalsIgnoreCase("admin")) {
+            Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                    .orElseThrow(() -> new RoleNotFoundException("Error: Role is not found"));
+            roles.add(adminRole);
+        } else{
             Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                     .orElseThrow(()-> new RoleNotFoundException("Error: Role is not found"));
             roles.add(userRole);
-        } else{
-            strRoles.forEach(role->{
-                switch(role){
-                    case "admin":
-                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                                .orElseThrow(()-> new RoleNotFoundException("Error: Role is not found"));
-                        roles.add(adminRole);
-                        break;
-                    default:
-                        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                                .orElseThrow(()-> new RoleNotFoundException("Error: Role is not found"));
-                        roles.add(userRole);
-                }
-            });
         }
         customer.setRoles(roles);
         customerRepository.save(customer);
