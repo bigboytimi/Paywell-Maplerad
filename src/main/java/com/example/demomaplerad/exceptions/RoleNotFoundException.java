@@ -1,6 +1,7 @@
 package com.example.demomaplerad.exceptions;
 
 public class RoleNotFoundException extends RuntimeException {
-    public RoleNotFoundException(String s) {
+    public RoleNotFoundException(String message) {
+        super(message);
     }
 }

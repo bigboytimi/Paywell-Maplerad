@@ -11,7 +11,7 @@ import java.util.Set;
 @Setter
 @Builder
 public class LoginResponse {
-    private String id;
+    private Long id;
     private String token;
     private String username;
     private String email;

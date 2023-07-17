@@ -1,8 +1,12 @@
 package com.example.demomaplerad.dto.request;
 
+import com.example.demomaplerad.model.Address;
+import com.example.demomaplerad.model.Phone;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -24,7 +28,10 @@ public class SignupRequest {
     @NotBlank(message = "Invalid: Date cannot be blank")
     @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$", message = "Date format should be 'yyyy-MM-dd'")
     private String dob;
-
+    @NotBlank(message = "Invalid: Phone details cannot be blank")
+    private PhoneDTO phoneDetails;
+    @NotBlank(message = "Invalid: Address Details cannot be blank")
+    private AddressDTO addressDetails;
     private String role;
 
 }

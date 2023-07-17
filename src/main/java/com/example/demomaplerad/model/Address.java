@@ -1,7 +1,6 @@
 package com.example.demomaplerad.model;
 
 
-import com.example.demomaplerad.enums.Country;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,6 +9,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 public class Address {
     @Id
@@ -19,8 +19,7 @@ public class Address {
     private String street2;
     private String city;
     private String state;
-    @Enumerated(EnumType.STRING)
-    private Country country;
+    private String country;
     private String postal_code;
     @OneToOne(mappedBy = "address")
     private Customer customer;

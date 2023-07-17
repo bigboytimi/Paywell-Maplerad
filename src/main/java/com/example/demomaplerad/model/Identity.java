@@ -1,6 +1,5 @@
 package com.example.demomaplerad.model;
 
-import com.example.demomaplerad.enums.Country;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,7 +18,7 @@ public class Identity {
     private String type;
     private String image;
     private String number;
-    private Country country;
+    private String country;
     @OneToOne(mappedBy = "identity")
     private Customer customer;
 }

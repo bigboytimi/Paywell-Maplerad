@@ -19,7 +19,7 @@ import java.util.Set;
 public class Customer extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String customer_id;
+    private Long customer_id;
     private String first_name;
     private String last_name;
     private String middle_name;
@@ -35,7 +35,7 @@ public class Customer extends BaseEntity{
     @JoinColumn(name = "identity_id", referencedColumnName = "id")
     private Identity identity;
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "address_id", referencedColumnName = "id")
+    @JoinColumn(name = "address_id", referencedColumnName = "id", nullable = false)
     private Address address;
     private String photo;
 
