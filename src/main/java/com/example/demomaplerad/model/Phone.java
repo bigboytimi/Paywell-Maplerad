@@ -16,7 +16,7 @@ import lombok.*;
 public class Phone {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String id;
+    private Long id;
     private String phone_country_code;
     private String phone_number;
     @OneToOne(mappedBy = "phone")
