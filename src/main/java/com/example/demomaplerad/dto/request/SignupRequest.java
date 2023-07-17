@@ -1,13 +1,10 @@
 package com.example.demomaplerad.dto.request;
 
-import com.example.demomaplerad.model.Address;
-import com.example.demomaplerad.model.Phone;
+import com.example.demomaplerad.dto.request.dtos.AddressDTO;
+import com.example.demomaplerad.dto.request.dtos.PhoneDTO;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter

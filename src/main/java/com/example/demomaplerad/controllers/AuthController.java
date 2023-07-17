@@ -4,6 +4,8 @@ package com.example.demomaplerad.controllers;
 import com.example.demomaplerad.dto.request.LoginRequest;
 import com.example.demomaplerad.dto.request.SignupRequest;
 import com.example.demomaplerad.dto.response.LoginResponse;
+import com.example.demomaplerad.dto.response.SignupResponse;
+import com.example.demomaplerad.exceptions.EmailExistsException;
 import com.example.demomaplerad.repository.CustomerRepository;
 import com.example.demomaplerad.service.CustomerService;
 import jakarta.validation.Valid;
@@ -23,11 +25,8 @@ public class AuthController {
 
 
     @PostMapping("/signup")
-    public ResponseEntity<String> registerUser(@Valid @RequestBody SignupRequest request){
-        if(customerRepository.existsByEmail(request.getEmail())){
-            return new ResponseEntity<>("Error: Email already exists!", HttpStatus.BAD_REQUEST);
-        }
-        String result = customerService.registerUser(request);
+    public ResponseEntity<SignupResponse> registerUser(@Valid @RequestBody SignupRequest request) throws EmailExistsException {
+        SignupResponse result = customerService.registerUser(request);
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 

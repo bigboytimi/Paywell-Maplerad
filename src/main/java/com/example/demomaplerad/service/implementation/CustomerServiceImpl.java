@@ -3,7 +3,9 @@ package com.example.demomaplerad.service.implementation;
 import com.example.demomaplerad.dto.request.LoginRequest;
 import com.example.demomaplerad.dto.request.SignupRequest;
 import com.example.demomaplerad.dto.response.LoginResponse;
+import com.example.demomaplerad.dto.response.SignupResponse;
 import com.example.demomaplerad.enums.ERole;
+import com.example.demomaplerad.exceptions.EmailExistsException;
 import com.example.demomaplerad.exceptions.RoleNotFoundException;
 import com.example.demomaplerad.model.Address;
 import com.example.demomaplerad.model.Customer;
@@ -15,6 +17,8 @@ import com.example.demomaplerad.security.CustomUserDetails;
 import com.example.demomaplerad.security.JwtUtils;
 import com.example.demomaplerad.service.CustomerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -35,14 +39,16 @@ public class CustomerServiceImpl implements CustomerService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder encoder;
     private final JwtUtils jwtUtils;
-
-
-    AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
     @Override
-    public String registerUser(SignupRequest request) {
+    public SignupResponse registerUser(SignupRequest request) throws EmailExistsException {
+        if(customerRepository.existsByEmail(request.getEmail())){
+            throw new EmailExistsException("Email already exists");
+        }
 
         Customer customer = MapperService.mapDtoToCustomer(request);
+        customer.setPassword(encoder.encode(request.getPassword()));
 
         String strRoles = request.getRole();
         Set<Role> roles = new HashSet<>();
@@ -62,8 +68,7 @@ public class CustomerServiceImpl implements CustomerService {
             roles.add(userRole);
         }
         customer.setRoles(roles);
-        customerRepository.save(customer);
-        return "User registered successfully";
+        return MapperService.mapCustomerToResponse(customerRepository.save(customer));
     }
 
     @Override

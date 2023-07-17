@@ -1,15 +1,21 @@
 package com.example.demomaplerad.service.implementation;
 
-import com.example.demomaplerad.dto.request.AddressDTO;
-import com.example.demomaplerad.dto.request.PhoneDTO;
+import com.example.demomaplerad.dto.request.dtos.AddressDTO;
+import com.example.demomaplerad.dto.request.dtos.PhoneDTO;
 import com.example.demomaplerad.dto.request.SignupRequest;
+import com.example.demomaplerad.dto.response.SignupResponse;
 import com.example.demomaplerad.model.Address;
 import com.example.demomaplerad.model.Customer;
 import com.example.demomaplerad.model.Phone;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class MapperService {
+
+    private final PasswordEncoder encoder;
 
     public static Phone mapPhoneDtoToPhone(PhoneDTO phoneRequest){
         return Phone.builder()
@@ -35,12 +41,21 @@ public class MapperService {
                 .middle_name(request.getMiddleName())
                 .last_name(request.getLastName())
                 .dob(request.getDob())
-                .password(request.getPassword())
                 .identification_number(request.getIdentification_number())
                 .phone(mapPhoneDtoToPhone(request.getPhoneDetails()))
                 .address(mapAddressDtoToAddress(request.getAddressDetails()))
                 .build();
 
+    }
+
+    public static SignupResponse mapCustomerToResponse(Customer customer){
+        return SignupResponse.builder()
+                .id(customer.getCustomer_id())
+                .firstName(customer.getFirst_name())
+                .lastName(customer.getLast_name())
+                .email(customer.getEmail())
+                .message("Customer entity successfully saved")
+                .build();
     }
 
 }

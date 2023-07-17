@@ -1,4 +1,4 @@
-package com.example.demomaplerad.dto.request;
+package com.example.demomaplerad.dto.request.dtos;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
