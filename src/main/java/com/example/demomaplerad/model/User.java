@@ -3,7 +3,6 @@ package com.example.demomaplerad.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,27 +15,35 @@ import java.util.Set;
 @Getter
 @Entity
 @Table(name = "customer")
-public class Customer extends BaseEntity{
+public class User extends BaseEntity{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long customer_id;
+    private String customer_id;
     private String first_name;
     private String last_name;
     private String middle_name;
-    private String username;
+    @Column(nullable = false)
+    private String country;
+
+    @Column(nullable = false)
+    private String status;
+    @Column(nullable = false)
+    private int tier;
     private String email;
     private String identification_number;
     private String dob;
     private String password;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "phone_id", referencedColumnName = "id", nullable = false)
+    @Embedded
     private Phone phone;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "identity_id", referencedColumnName = "id")
     private Identity identity;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "address_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "wallet_id", referencedColumnName = "wallet_id")
+    private Wallet wallet;
     private String photo;
 
     @ManyToMany(fetch = FetchType.LAZY)

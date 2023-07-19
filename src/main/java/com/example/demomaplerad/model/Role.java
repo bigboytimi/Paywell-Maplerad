@@ -1,7 +1,7 @@
 package com.example.demomaplerad.model;
 
 
-import com.example.demomaplerad.enums.ERole;
+import com.example.demomaplerad.model.enums.ERole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

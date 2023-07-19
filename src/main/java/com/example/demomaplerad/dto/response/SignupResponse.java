@@ -1,16 +1,22 @@
 package com.example.demomaplerad.dto.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDate;
 
 @Builder
 @Getter
 @Setter
 public class SignupResponse {
-    private Long id;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String message;
+
+   private String customer_id;
+   private String name;
+   private String status;
+   private int tier;
+   private String balance;
+   private String accountNumber;
+   private String walletType;
 }

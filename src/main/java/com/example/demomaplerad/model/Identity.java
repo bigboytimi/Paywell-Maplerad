@@ -14,11 +14,11 @@ import lombok.*;
 public class Identity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Long id;
     private String type;
     private String image;
     private String number;
     private String country;
     @OneToOne(mappedBy = "identity")
-    private Customer customer;
+    private User customer;
 }

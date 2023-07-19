@@ -1,6 +1,6 @@
 package com.example.demomaplerad.security;
 
-import com.example.demomaplerad.model.Customer;
+import com.example.demomaplerad.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class CustomUserDetails implements UserDetails {
     @Serial
     private static final long serialVersionUID = 1L;
-    private Long id;
+    private String id;
     private String username;
     private String email;
 
@@ -34,14 +34,14 @@ public class CustomUserDetails implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public static CustomUserDetails build(Customer user) {
+    public static CustomUserDetails build(User user) {
         List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(Collectors.toList());
 
         return new CustomUserDetails(
                 user.getCustomer_id(),
-                user.getFirst_name(),
+                user.getFirst_name() + " " + user.getLast_name(),
                 user.getEmail(),
                 user.getPassword(),
                 authorities);

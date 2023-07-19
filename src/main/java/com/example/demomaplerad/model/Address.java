@@ -22,5 +22,5 @@ public class Address {
     private String country;
     private String postal_code;
     @OneToOne(mappedBy = "address")
-    private Customer customer;
+    private User customer;
 }

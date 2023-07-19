@@ -11,14 +11,8 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "phone")
+@Embeddable
 public class Phone {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
     private String phone_country_code;
     private String phone_number;
-    @OneToOne(mappedBy = "phone")
-    private Customer customer;
 }

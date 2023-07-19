@@ -1,6 +1,6 @@
 package com.example.demomaplerad.data_seeder;
 
-import com.example.demomaplerad.enums.ERole;
+import com.example.demomaplerad.model.enums.ERole;
 import com.example.demomaplerad.model.Role;
 import com.example.demomaplerad.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
