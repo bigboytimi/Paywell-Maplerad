@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serial;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +26,7 @@ import java.util.stream.Collectors;
 public class CustomUserDetails implements UserDetails {
     @Serial
     private static final long serialVersionUID = 1L;
-    private String id;
+    private Long id;
     private String username;
     private String email;
 
@@ -40,7 +41,7 @@ public class CustomUserDetails implements UserDetails {
                 .collect(Collectors.toList());
 
         return new CustomUserDetails(
-                user.getCustomer_id(),
+                user.getId(),
                 user.getFirst_name() + " " + user.getLast_name(),
                 user.getEmail(),
                 user.getPassword(),

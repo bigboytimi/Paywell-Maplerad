@@ -1,5 +1,6 @@
 package com.example.demomaplerad.dto.request;
 
+
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -10,9 +11,9 @@ import java.math.BigDecimal;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreditRequest {
+public class TransferFundsRequest {
     private String accountNumber;
+    private String destinationAccountNumber;
     private String walletType;
     private BigDecimal amount;
-
 }

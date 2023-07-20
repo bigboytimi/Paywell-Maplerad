@@ -1,6 +1,7 @@
 package com.example.demomaplerad.controllers;
 
 import com.example.demomaplerad.dto.request.CreditRequest;
+import com.example.demomaplerad.dto.request.TransferFundsRequest;
 import com.example.demomaplerad.dto.response.CreditResponse;
 import com.example.demomaplerad.dto.response.GlobalResponse;
 import com.example.demomaplerad.integration.WalletService;
@@ -26,7 +27,7 @@ public class WalletController {
     }
 
     @PostMapping("/transfer-to-wallet")
-    public ResponseEntity<GlobalResponse<CreditResponse>> transferFunds(@RequestBody CreditRequest request){
+    public ResponseEntity<GlobalResponse<CreditResponse>> transferFunds(@RequestBody TransferFundsRequest request){
         GlobalResponse<CreditResponse> response = new GlobalResponse<>(walletService.transferFunds(request));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

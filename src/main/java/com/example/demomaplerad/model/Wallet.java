@@ -13,9 +13,7 @@ import java.util.List;
 @Setter
 @Getter
 @Entity
-public class Wallet {
-    @Id
-    private String wallet_id;
+public class Wallet extends AbstractBaseEntity<Long>{
     private String accountNumber;
     private BigDecimal ledgerBalance;
     private BigDecimal availableBalance;
@@ -27,7 +25,7 @@ public class Wallet {
     @OneToOne(mappedBy = "wallet")
     @JoinColumn(name = "customer_id")
     private User customer;
-    @OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Transaction> transactionList;
+//    @OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Transaction> transactionList;
 
 }

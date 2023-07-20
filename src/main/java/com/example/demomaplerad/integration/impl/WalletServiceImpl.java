@@ -1,6 +1,7 @@
 package com.example.demomaplerad.integration.impl;
 
 import com.example.demomaplerad.dto.request.CreditRequest;
+import com.example.demomaplerad.dto.request.TransferFundsRequest;
 import com.example.demomaplerad.dto.response.CreditResponse;
 import com.example.demomaplerad.exceptions.UserNotFoundException;
 import com.example.demomaplerad.exceptions.WalletNotFoundException;
@@ -27,10 +28,9 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     public Wallet createWallet(User user, String walletType) {
-        WalletType selectedWalletType = walletType.equals("USD") ? WalletType.USD : WalletType.NGN;
+        WalletType selectedWalletType = walletType.equalsIgnoreCase("USD") ? WalletType.USD : WalletType.NGN;
 
         return walletRepository.save(Wallet.builder()
-                .wallet_id(UUID.randomUUID().toString())
                 .walletType(selectedWalletType)
                 .accountNumber(generateRandomAccountNumber())
                 .availableBalance(BigDecimal.valueOf(0.0))
@@ -64,7 +64,7 @@ public class WalletServiceImpl implements WalletService {
 
         Wallet updatedWallet = walletRepository.save(wallet);
         return CreditResponse.builder()
-                .wallet_id(updatedWallet.getWallet_id())
+                .wallet_id(updatedWallet.getId())
                 .updatedAmount(updatedWallet.getAvailableBalance().toString())
                 .accountNumber(updatedWallet.getAccountNumber())
                 .status("Wallet credited successfully")
@@ -72,13 +72,12 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
-    public CreditResponse transferFunds(CreditRequest request) {
-        String authenticatedUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        User user = customerRepository.findByEmail(authenticatedUserEmail)
-                .orElseThrow(()-> new UserNotFoundException("Invalid: Non-existing user"));
-
-
+    public CreditResponse transferFunds(TransferFundsRequest request) {
+//        String authenticatedUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+//
+//        User user = customerRepository.findByEmail(authenticatedUserEmail)
+//                .orElseThrow(()-> new UserNotFoundException("Invalid: Non-existing user"));
+        return null;
     }
 
 

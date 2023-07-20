@@ -4,8 +4,11 @@ package com.example.demomaplerad.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+
 
 
 @AllArgsConstructor
@@ -15,9 +18,8 @@ import java.util.Set;
 @Getter
 @Entity
 @Table(name = "customer")
-public class User extends BaseEntity{
-    @Id
-    private String customer_id;
+public class User extends AbstractBaseEntity<Long> {
+    private String user_id;
     private String first_name;
     private String last_name;
     private String middle_name;
@@ -29,6 +31,11 @@ public class User extends BaseEntity{
     @Column(nullable = false)
     private int tier;
     private String email;
+
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
     private String identification_number;
     private String dob;
     private String password;
@@ -42,7 +49,7 @@ public class User extends BaseEntity{
     private Address address;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "wallet_id", referencedColumnName = "wallet_id")
+    @JoinColumn(name = "id", referencedColumnName = "wallet_id")
     private Wallet wallet;
     private String photo;
 

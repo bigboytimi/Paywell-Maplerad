@@ -21,20 +21,5 @@ public class SignupRequest {
 
     @NotBlank(message = "Invalid: Password cannot be blank")
     private String country;
-
-    private String walletType;
-
     private String role;
-//    @NotBlank(message = "Invalid: Password cannot be blank")
-//    private String identification_number;
-//    @NotBlank(message = "Invalid: Date cannot be blank")
-//    @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$", message = "Date format should be 'yyyy-MM-dd'")
-//    private String dob;
-//    @NotNull(message = "Invalid: Phone details cannot be blank")
-//    private PhoneDTO phoneDetails;
-//    @NotNull(message = "Invalid: Address Details cannot be blank")
-//    private AddressDTO addressDetails;
-//    private String walletType;
-
-
 }

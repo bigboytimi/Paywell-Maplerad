@@ -6,17 +6,16 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Builder
 @Getter
 @Setter
 public class SignupResponse {
-
+   private Long id;
    private String customer_id;
    private String name;
    private String status;
    private int tier;
-   private String balance;
-   private String accountNumber;
-   private String walletType;
+   private WalletDetails walletDetails;
 }

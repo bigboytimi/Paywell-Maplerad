@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreditResponse {
-    private String wallet_id;
+    private Long wallet_id;
     private String accountNumber;
     private String updatedAmount;
     private String walletType;
