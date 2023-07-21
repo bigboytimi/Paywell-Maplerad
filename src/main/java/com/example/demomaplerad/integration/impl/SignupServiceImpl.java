@@ -82,8 +82,8 @@ public class SignupServiceImpl implements SignupService {
 
         List<Wallet> userWallet = new ArrayList<>();
 
-        Wallet usdWallet = walletService.createWallet(user, "USD");
-        Wallet nairaWallet = walletService.createWallet(user, "NGN");
+        Wallet usdWallet = walletService.createWallet(savedUser, "USD");
+        Wallet nairaWallet = walletService.createWallet(savedUser, "NGN");
 
         userWallet.add(usdWallet);
         userWallet.add(nairaWallet);

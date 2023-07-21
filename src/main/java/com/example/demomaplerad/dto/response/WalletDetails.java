@@ -13,6 +13,6 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class WalletDetails {
-    private List<String> walletTypes;
+    private Map<String, String> walletTypes;
     private Map<String, BigDecimal> availableBalance;
 }
