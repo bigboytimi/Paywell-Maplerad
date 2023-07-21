@@ -8,10 +8,7 @@ import com.example.demomaplerad.integration.WalletService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,9 +17,9 @@ public class WalletController {
 
     private final WalletService walletService;
 
-    @PostMapping("/credit-from-wallet")
-    public ResponseEntity<GlobalResponse<CreditResponse>> creditWallet(@RequestBody CreditRequest request){
-        GlobalResponse<CreditResponse> response = new GlobalResponse<>(walletService.creditWallet(request));
+    @PostMapping("/credit-from-wallet/{walletId}")
+    public ResponseEntity<GlobalResponse<CreditResponse>> creditWallet(@PathVariable String walletId, @RequestBody CreditRequest request){
+        GlobalResponse<CreditResponse> response = new GlobalResponse<>(walletService.creditWallet(request, walletId));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

@@ -49,20 +49,18 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
-    public CreditResponse creditWallet(CreditRequest request) {
+    public CreditResponse creditWallet(CreditRequest request, String walletId) {
         CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         String authenticatedUserEmail = userDetails.getEmail();
 
+
         User user = customerRepository.findByEmail(authenticatedUserEmail)
                 .orElseThrow(()-> new UserNotFoundException("Invalid: Non-existing user"));
 
-        Wallet wallet = walletRepository.findWalletByAccountNumber(request.getAccountNumber())
-                .orElseThrow(()-> new WalletNotFoundException("Invalid: Non-existing wallet. Please verify account number."));
 
-        if (!user.equals(wallet.getCustomer())){
-            throw new UserNotFoundException("Authentication Error: Wallet belongs to another user!");
-        }
+        Wallet wallet = walletRepository.findById(walletId)
+                .orElseThrow(()-> new WalletNotFoundException("Invalid: Non-existing wallet. Please verify account number."));
 
         if(request.getWalletType().equalsIgnoreCase(wallet.getWalletType().name())){
             wallet.setAvailableBalance(wallet.getAvailableBalance().add(request.getAmount()));
@@ -75,6 +73,7 @@ public class WalletServiceImpl implements WalletService {
                 .wallet_id(updatedWallet.getId())
                 .updatedAmount(updatedWallet.getAvailableBalance().toString())
                 .accountNumber(updatedWallet.getAccountNumber())
+                .walletType(updatedWallet.getWalletType().name())
                 .status("Wallet credited successfully")
                 .build();
     }

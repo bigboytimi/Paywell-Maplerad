@@ -14,6 +14,7 @@ import java.util.List;
 @Getter
 @Entity
 public class Wallet extends AbstractBaseEntity<Long>{
+
     private String accountNumber;
     private BigDecimal ledgerBalance;
     private BigDecimal availableBalance;

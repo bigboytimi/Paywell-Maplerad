@@ -46,12 +46,12 @@ public class ModelBuilder {
 
     public WalletDetails buildWalletDetails(List<Wallet> wallets){
         WalletDetails walletDetails = new WalletDetails();
-        Map<String, String> walletTypes = new HashMap<>();
+        Map<String, Long> walletTypes = new HashMap<>();
         Map<String, BigDecimal> balance = new HashMap<>();
 
 
         for (Wallet wallet : wallets){
-            walletTypes.put(wallet.getWalletType().toString(), wallet.getAccountNumber());
+            walletTypes.put(wallet.getWalletType().toString(), wallet.getId());
 
 
             if(wallet.getWalletType().name().equalsIgnoreCase("USD")){

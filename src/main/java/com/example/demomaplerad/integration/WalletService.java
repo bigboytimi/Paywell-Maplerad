@@ -9,6 +9,6 @@ import com.example.demomaplerad.model.Wallet;
 public interface WalletService {
     public Wallet createWallet(User user, String walletType);
     public String generateRandomAccountNumber();
-    public CreditResponse creditWallet(CreditRequest request);
+    public CreditResponse creditWallet(CreditRequest request, String walletId);
     public CreditResponse transferFunds(TransferFundsRequest request);
 }
