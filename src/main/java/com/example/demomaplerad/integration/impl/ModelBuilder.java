@@ -70,7 +70,8 @@ public class ModelBuilder {
     public LoginResponse buildLoginResponse(String username, String jwt){
         return LoginResponse.builder()
                 .username(username)
-                .token(jwt).build();
+                .token(jwt)
+                .status("Logged in successfully").build();
     }
 
 

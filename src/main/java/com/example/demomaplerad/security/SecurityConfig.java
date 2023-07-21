@@ -28,11 +28,13 @@ public class SecurityConfig {
     private CustomUserDetailsService userDetailsService;
 
     private final AuthEntryPointJwt unauthorizedHandler;
+    private final JwtUtils jwtUtils;
+
 
 
     @Bean
     public AuthTokenFilter authenticationTokenFilter(){
-        return new AuthTokenFilter();
+        return new AuthTokenFilter(jwtUtils, userDetailsService);
     }
 
     @Bean

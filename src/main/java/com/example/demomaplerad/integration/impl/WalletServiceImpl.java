@@ -11,16 +11,22 @@ import com.example.demomaplerad.model.Wallet;
 import com.example.demomaplerad.model.enums.WalletType;
 import com.example.demomaplerad.repository.CustomerRepository;
 import com.example.demomaplerad.repository.WalletRepository;
+import com.example.demomaplerad.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.security.Principal;
 import java.util.Random;
 import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class WalletServiceImpl implements WalletService {
     private static final int ACCOUNT_NUMBER_LENGTH = 10;
     private final WalletRepository walletRepository;
@@ -44,7 +50,9 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     public CreditResponse creditWallet(CreditRequest request) {
-        String authenticatedUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        String authenticatedUserEmail = userDetails.getEmail();
 
         User user = customerRepository.findByEmail(authenticatedUserEmail)
                 .orElseThrow(()-> new UserNotFoundException("Invalid: Non-existing user"));

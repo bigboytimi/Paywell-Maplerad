@@ -10,7 +10,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LoginRequest {
-//    private String username;
     @Email
     @NotBlank(message = "Invalid: Email can not be blank")
     private String email;
