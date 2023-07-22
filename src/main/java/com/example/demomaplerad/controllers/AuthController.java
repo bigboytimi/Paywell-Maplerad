@@ -7,7 +7,7 @@ import com.example.demomaplerad.dto.response.GlobalResponse;
 import com.example.demomaplerad.dto.response.LoginResponse;
 import com.example.demomaplerad.dto.response.SignupResponse;
 import com.example.demomaplerad.exceptions.EmailExistsException;
-import com.example.demomaplerad.integration.SignupService;
+import com.example.demomaplerad.service.SignupService;
 import com.example.demomaplerad.repository.CustomerRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

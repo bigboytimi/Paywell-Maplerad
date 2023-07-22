@@ -1,4 +1,4 @@
-package com.example.demomaplerad.integration;
+package com.example.demomaplerad.service;
 
 import com.example.demomaplerad.dto.request.LoginRequest;
 import com.example.demomaplerad.dto.request.SignupRequest;

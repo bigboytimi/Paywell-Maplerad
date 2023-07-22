@@ -1,28 +1,23 @@
-package com.example.demomaplerad.integration.impl;
+package com.example.demomaplerad.service.impl;
 
-import com.example.demomaplerad.dto.request.CreditRequest;
-import com.example.demomaplerad.dto.request.TransferFundsRequest;
+import com.example.demomaplerad.dto.request.CreditWalletRequest;
 import com.example.demomaplerad.dto.response.CreditResponse;
 import com.example.demomaplerad.exceptions.UserNotFoundException;
 import com.example.demomaplerad.exceptions.WalletNotFoundException;
-import com.example.demomaplerad.integration.WalletService;
+import com.example.demomaplerad.service.WalletService;
 import com.example.demomaplerad.model.User;
 import com.example.demomaplerad.model.Wallet;
-import com.example.demomaplerad.model.enums.WalletType;
+import com.example.demomaplerad.model.enums.Currency;
 import com.example.demomaplerad.repository.CustomerRepository;
 import com.example.demomaplerad.repository.WalletRepository;
 import com.example.demomaplerad.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.security.Principal;
 import java.util.Random;
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -34,10 +29,10 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     public Wallet createWallet(User user, String walletType) {
-        WalletType selectedWalletType = walletType.equalsIgnoreCase("USD") ? WalletType.USD : WalletType.NGN;
+        Currency currency = walletType.equalsIgnoreCase("USD") ? Currency.USD : Currency.NGN;
 
         return walletRepository.save(Wallet.builder()
-                .walletType(selectedWalletType)
+                .currency(currency)
                 .accountNumber(generateRandomAccountNumber())
                 .availableBalance(BigDecimal.valueOf(0.0))
                 .holdingBalance(BigDecimal.valueOf(0.0))
@@ -49,7 +44,7 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
-    public CreditResponse creditWallet(CreditRequest request, String walletId) {
+    public CreditResponse creditWallet(CreditWalletRequest request, String walletId) {
         CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         String authenticatedUserEmail = userDetails.getEmail();
@@ -62,10 +57,10 @@ public class WalletServiceImpl implements WalletService {
         Wallet wallet = walletRepository.findById(walletId)
                 .orElseThrow(()-> new WalletNotFoundException("Invalid: Non-existing wallet. Please verify account number."));
 
-        if(request.getWalletType().equalsIgnoreCase(wallet.getWalletType().name())){
+        if(request.getWalletType().equalsIgnoreCase(wallet.getCurrency().name())){
             wallet.setAvailableBalance(wallet.getAvailableBalance().add(request.getAmount()));
         }else {
-            throw new WalletNotFoundException("Invalid: Incorrect Wallet Type. Change to " + wallet.getWalletType());
+            throw new WalletNotFoundException("Invalid: Incorrect Wallet Type. Change to " + wallet.getCurrency());
         }
 
         Wallet updatedWallet = walletRepository.save(wallet);
@@ -73,19 +68,12 @@ public class WalletServiceImpl implements WalletService {
                 .wallet_id(updatedWallet.getId())
                 .updatedAmount(updatedWallet.getAvailableBalance().toString())
                 .accountNumber(updatedWallet.getAccountNumber())
-                .walletType(updatedWallet.getWalletType().name())
+                .walletType(updatedWallet.getCurrency().name())
                 .status("Wallet credited successfully")
                 .build();
     }
 
-    @Override
-    public CreditResponse transferFunds(TransferFundsRequest request) {
-//        String authenticatedUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-//
-//        User user = customerRepository.findByEmail(authenticatedUserEmail)
-//                .orElseThrow(()-> new UserNotFoundException("Invalid: Non-existing user"));
-        return null;
-    }
+
 
 
     @Override

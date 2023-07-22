@@ -1,6 +1,5 @@
-package com.example.demomaplerad.payload;
+package com.example.demomaplerad.integration.payload.response;
 
-import com.example.demomaplerad.dto.response.SignupResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-public class Response<T> {
+public class MapleradRegResponse<T> {
     private boolean status;
     private String message;
     private RegistrationResponse data;

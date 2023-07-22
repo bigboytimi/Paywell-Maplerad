@@ -1,4 +1,4 @@
-package com.example.demomaplerad.integration.impl;
+package com.example.demomaplerad.service.impl;
 
 import com.example.demomaplerad.dto.request.SignupRequest;
 import com.example.demomaplerad.dto.response.LoginResponse;
@@ -6,7 +6,7 @@ import com.example.demomaplerad.dto.response.SignupResponse;
 import com.example.demomaplerad.dto.response.WalletDetails;
 import com.example.demomaplerad.model.User;
 import com.example.demomaplerad.model.Wallet;
-import com.example.demomaplerad.payload.Registration;
+import com.example.demomaplerad.integration.payload.requests.Registration;
 import com.example.demomaplerad.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -51,12 +51,12 @@ public class ModelBuilder {
 
 
         for (Wallet wallet : wallets){
-            walletTypes.put(wallet.getWalletType().toString(), wallet.getId());
+            walletTypes.put(wallet.getCurrency().toString(), wallet.getId());
 
 
-            if(wallet.getWalletType().name().equalsIgnoreCase("USD")){
+            if(wallet.getCurrency().name().equalsIgnoreCase("USD")){
                 balance.put("USD", wallet.getAvailableBalance());
-            } else if (wallet.getWalletType().name().equalsIgnoreCase("NGN")) {
+            } else if (wallet.getCurrency().name().equalsIgnoreCase("NGN")) {
                 balance.put("NGN", wallet.getAvailableBalance());
             }
         }

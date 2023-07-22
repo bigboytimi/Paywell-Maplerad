@@ -4,14 +4,13 @@ import lombok.*;
 
 import java.math.BigDecimal;
 
+
 @Builder
 @Data
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreditRequest {
-    private String walletType;
+public class CardFundRequest {
     private BigDecimal amount;
-
 }

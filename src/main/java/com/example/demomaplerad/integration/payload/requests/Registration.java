@@ -1,4 +1,4 @@
-package com.example.demomaplerad.payload;
+package com.example.demomaplerad.integration.payload.requests;
 
 import lombok.Builder;
 import lombok.Data;

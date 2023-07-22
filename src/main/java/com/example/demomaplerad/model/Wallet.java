@@ -1,11 +1,10 @@
 package com.example.demomaplerad.model;
 
-import com.example.demomaplerad.model.enums.WalletType;
+import com.example.demomaplerad.model.enums.Currency;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,7 +21,7 @@ public class Wallet extends AbstractBaseEntity<Long>{
     private boolean isActive;
     private boolean isDisabled;
     @Enumerated(EnumType.STRING)
-    private WalletType walletType;
+    private Currency currency;
     @OneToOne(mappedBy = "wallet")
     @JoinColumn(name = "customer_id")
     private User customer;

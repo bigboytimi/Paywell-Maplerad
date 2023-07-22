@@ -1,4 +1,4 @@
-package com.example.demomaplerad.payload;
+package com.example.demomaplerad.integration.payload.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
