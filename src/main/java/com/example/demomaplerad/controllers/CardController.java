@@ -20,7 +20,6 @@ public class CardController {
     public ResponseEntity<VirtualCardResponse> createCard(@RequestBody VirtualCardRequest request){
         return new ResponseEntity<>(virtualCardService.createCardRequest(request), HttpStatus.CREATED);
     }
-
     @PostMapping(value = "/fund/{cardId}")
     public ResponseEntity<CardFundResponse> fundCard(@PathVariable Long cardId, @RequestBody CardFundRequest request){
         return new ResponseEntity<>(virtualCardService.fundCard(cardId, request), HttpStatus.OK);
@@ -35,6 +34,4 @@ public class CardController {
     public ResponseEntity<CardStatusResponse> unfreezeCard(@PathVariable Long cardId){
         return new ResponseEntity<>(virtualCardService.unfreezeCardReq(cardId), HttpStatus.OK);
     }
-
-
 }

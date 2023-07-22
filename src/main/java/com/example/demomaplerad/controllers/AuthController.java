@@ -23,7 +23,6 @@ public class AuthController {
     private final CustomerRepository customerRepository;
     private final SignupService signupService;
 
-
     @PostMapping("/signup")
     public ResponseEntity<GlobalResponse<SignupResponse>> registerUser(@Valid @RequestBody SignupRequest request) throws EmailExistsException {
         GlobalResponse<SignupResponse> result = new GlobalResponse<>(signupService.registerNewCustomer(request));

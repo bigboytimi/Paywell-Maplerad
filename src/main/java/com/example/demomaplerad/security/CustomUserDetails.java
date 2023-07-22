@@ -21,8 +21,9 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Getter
 @Setter
-//this class is used to hold and get data of an authenticated user
-//from an Authentication object
+/*
+this class is used to hold and get data of an authenticated user from an Authentication object
+ */
 public class CustomUserDetails implements UserDetails {
     @Serial
     private static final long serialVersionUID = 1L;

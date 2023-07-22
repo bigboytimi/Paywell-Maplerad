@@ -7,11 +7,8 @@ import com.example.demomaplerad.dto.response.WalletDetails;
 import com.example.demomaplerad.model.User;
 import com.example.demomaplerad.model.Wallet;
 import com.example.demomaplerad.integration.payload.requests.Registration;
-import com.example.demomaplerad.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -19,9 +16,6 @@ import java.util.*;
 @RequiredArgsConstructor
 public class ModelBuilder {
 
-    private final PasswordEncoder encoder;
-
-    private final RoleRepository roleRepository;
     public Registration buildRegistrationPayload(SignupRequest request){
         return Registration.builder()
                 .first_name(request.getFirstName())
@@ -73,7 +67,4 @@ public class ModelBuilder {
                 .token(jwt)
                 .status("Logged in successfully").build();
     }
-
-
-
 }

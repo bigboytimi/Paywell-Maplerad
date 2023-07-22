@@ -2,7 +2,7 @@ package com.example.demomaplerad.integration.impl;
 
 import com.example.demomaplerad.integration.CardService;
 import com.example.demomaplerad.integration.CustomerService;
-import com.example.demomaplerad.integration.payload.StatusResponse;
+import com.example.demomaplerad.integration.payload.response.StatusResponse;
 import com.example.demomaplerad.integration.payload.requests.Card;
 import com.example.demomaplerad.integration.payload.requests.Registration;
 import com.example.demomaplerad.integration.payload.response.CardResponse;
@@ -22,18 +22,14 @@ public class MapleradService implements CardService, CustomerService {
     @Override
     public RegistrationResponse registerUser(Registration registration) {
         String url = "https://sandbox.api.maplerad.com/v1/customers";
-
-        var response = apiConnection.connectAndPost(registration,url, HttpMethod.POST, MapleradRegResponse.class);
-        return response.getData();
+        return apiConnection.connectAndPost(registration,url, HttpMethod.POST, MapleradRegResponse.class).getData();
     }
 
 
     @Override
     public CardResponse createCard(Card request) {
         String url = "https://sandbox.api.maplerad.com/v1/issuing/business";
-
-        var response = apiConnection.connectAndPost(request, url, HttpMethod.POST, MapleradCardResponse.class);
-        return response.getData();
+        return apiConnection.connectAndPost(request, url, HttpMethod.POST, MapleradCardResponse.class).getData();
     }
 
     @Override

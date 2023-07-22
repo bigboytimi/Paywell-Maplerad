@@ -1,4 +1,4 @@
-package com.example.demomaplerad.exceptions;
+package com.example.demomaplerad.dto.response;
 
 import lombok.*;
 

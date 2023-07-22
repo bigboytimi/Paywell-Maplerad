@@ -40,12 +40,6 @@ public class User extends AbstractBaseEntity<Long> {
     private String password;
     @Embedded
     private Phone phone;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "identity_id", referencedColumnName = "id")
-    private Identity identity;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "address_id", referencedColumnName = "id")
-    private Address address;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<VirtualCard> virtualCards;
@@ -60,8 +54,4 @@ public class User extends AbstractBaseEntity<Long> {
             joinColumns = @JoinColumn(name = "customer_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
-
-
-
-
 }

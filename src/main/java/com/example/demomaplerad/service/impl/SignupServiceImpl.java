@@ -130,6 +130,5 @@ public class SignupServiceImpl implements SignupService {
             throw new UserNotFoundException("Invalid: Password is incorrect");
         }
     }
-
 }
 

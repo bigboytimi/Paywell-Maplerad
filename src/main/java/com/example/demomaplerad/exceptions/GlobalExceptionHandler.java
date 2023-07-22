@@ -1,15 +1,13 @@
 package com.example.demomaplerad.exceptions;
 
+import com.example.demomaplerad.dto.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -22,4 +20,95 @@ public class GlobalExceptionHandler {
         response.setResponse(ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = APIConnectionException.class)
+    public ResponseEntity<ErrorResponse> handleApiConnectionException(APIConnectionException ex) {
+        ErrorResponse response = new ErrorResponse();
+        response.setErrorCode(HttpStatus.BAD_REQUEST.value());
+        response.setTimestamp(LocalDate.now());
+        response.setResponse(ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = CardAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleCardExistsException(CardAlreadyExistsException ex) {
+        ErrorResponse response = new ErrorResponse();
+        response.setErrorCode(HttpStatus.BAD_REQUEST.value());
+        response.setTimestamp(LocalDate.now());
+        response.setResponse(ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = CardNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleCardNotFoundException(CardNotFoundException ex) {
+        ErrorResponse response = new ErrorResponse();
+        response.setErrorCode(HttpStatus.BAD_REQUEST.value());
+        response.setTimestamp(LocalDate.now());
+        response.setResponse(ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = CardRequestFailedException.class)
+    public ResponseEntity<ErrorResponse> handleCardRequestFailedException(CardRequestFailedException ex) {
+        ErrorResponse response = new ErrorResponse();
+        response.setErrorCode(HttpStatus.BAD_REQUEST.value());
+        response.setTimestamp(LocalDate.now());
+        response.setResponse(ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = DisabledCardException.class)
+    public ResponseEntity<ErrorResponse> handleDisabledCardException(DisabledCardException ex) {
+        ErrorResponse response = new ErrorResponse();
+        response.setErrorCode(HttpStatus.BAD_REQUEST.value());
+        response.setTimestamp(LocalDate.now());
+        response.setResponse(ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = JwtExpiredTokenException.class)
+    public ResponseEntity<ErrorResponse> handleJwtExpiredTokenException(JwtExpiredTokenException ex) {
+        ErrorResponse response = new ErrorResponse();
+        response.setErrorCode(HttpStatus.BAD_REQUEST.value());
+        response.setTimestamp(LocalDate.now());
+        response.setResponse(ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = NoWalletFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNoWalletFoundException(NoWalletFoundException ex) {
+        ErrorResponse response = new ErrorResponse();
+        response.setErrorCode(HttpStatus.BAD_REQUEST.value());
+        response.setTimestamp(LocalDate.now());
+        response.setResponse(ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = RoleNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleRoleNotFoundException(RoleNotFoundException ex) {
+        ErrorResponse response = new ErrorResponse();
+        response.setErrorCode(HttpStatus.BAD_REQUEST.value());
+        response.setTimestamp(LocalDate.now());
+        response.setResponse(ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException ex) {
+        ErrorResponse response = new ErrorResponse();
+        response.setErrorCode(HttpStatus.BAD_REQUEST.value());
+        response.setTimestamp(LocalDate.now());
+        response.setResponse(ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
 }

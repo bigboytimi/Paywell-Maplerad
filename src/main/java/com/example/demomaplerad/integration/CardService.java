@@ -1,6 +1,6 @@
 package com.example.demomaplerad.integration;
 
-import com.example.demomaplerad.integration.payload.StatusResponse;
+import com.example.demomaplerad.integration.payload.response.StatusResponse;
 import com.example.demomaplerad.integration.payload.requests.Card;
 import com.example.demomaplerad.integration.payload.response.CardResponse;
 import org.springframework.stereotype.Service;

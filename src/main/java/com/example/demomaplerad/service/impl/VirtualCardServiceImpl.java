@@ -7,7 +7,7 @@ import com.example.demomaplerad.dto.response.CardFundResponse;
 import com.example.demomaplerad.dto.response.VirtualCardResponse;
 import com.example.demomaplerad.exceptions.*;
 import com.example.demomaplerad.integration.impl.MapleradService;
-import com.example.demomaplerad.integration.payload.StatusResponse;
+import com.example.demomaplerad.integration.payload.response.StatusResponse;
 import com.example.demomaplerad.integration.payload.requests.Card;
 import com.example.demomaplerad.integration.payload.response.CardResponse;
 import com.example.demomaplerad.model.Transaction;
@@ -26,7 +26,6 @@ import com.example.demomaplerad.service.VirtualCardService;
 import com.example.demomaplerad.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -105,13 +104,13 @@ public class VirtualCardServiceImpl implements VirtualCardService {
         User user = customerRepository.findByEmail(userEmail).orElseThrow(()-> new UserNotFoundException("User not found"));
 
 
-        VirtualCard card = cardRepository.findById(cardId).orElseThrow(()-> new WalletNotFoundException("Wallet does not exist"));
+        VirtualCard card = cardRepository.findById(cardId).orElseThrow(()-> new NoWalletFoundException("Wallet does not exist"));
 
 
         Wallet wallet = card.getWallet();
 
         if (!card.getUser().equals(user)){
-            throw new InvalidCardRequestException("Card belongs to another user");
+            throw new CardRequestFailedException("Card belongs to another user");
         }
 
         if (card.isDisabled()){

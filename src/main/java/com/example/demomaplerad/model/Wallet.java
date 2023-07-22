@@ -25,7 +25,4 @@ public class Wallet extends AbstractBaseEntity<Long>{
     @OneToOne(mappedBy = "wallet")
     @JoinColumn(name = "customer_id")
     private User customer;
-//    @OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Transaction> transactionList;
-
 }

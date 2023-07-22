@@ -2,8 +2,8 @@ package com.example.demomaplerad.service.impl;
 
 import com.example.demomaplerad.dto.request.CreditWalletRequest;
 import com.example.demomaplerad.dto.response.CreditResponse;
+import com.example.demomaplerad.exceptions.NoWalletFoundException;
 import com.example.demomaplerad.exceptions.UserNotFoundException;
-import com.example.demomaplerad.exceptions.WalletNotFoundException;
 import com.example.demomaplerad.service.WalletService;
 import com.example.demomaplerad.model.User;
 import com.example.demomaplerad.model.Wallet;
@@ -55,12 +55,12 @@ public class WalletServiceImpl implements WalletService {
 
 
         Wallet wallet = walletRepository.findById(walletId)
-                .orElseThrow(()-> new WalletNotFoundException("Invalid: Non-existing wallet. Please verify account number."));
+                .orElseThrow(()-> new NoWalletFoundException("Invalid: Non-existing wallet. Please verify account number."));
 
         if(request.getWalletType().equalsIgnoreCase(wallet.getCurrency().name())){
             wallet.setAvailableBalance(wallet.getAvailableBalance().add(request.getAmount()));
         }else {
-            throw new WalletNotFoundException("Invalid: Incorrect Wallet Type. Change to " + wallet.getCurrency());
+            throw new NoWalletFoundException("Invalid: Incorrect Wallet Type. Change to " + wallet.getCurrency());
         }
 
         Wallet updatedWallet = walletRepository.save(wallet);
@@ -72,10 +72,6 @@ public class WalletServiceImpl implements WalletService {
                 .status("Wallet credited successfully")
                 .build();
     }
-
-
-
-
     @Override
     public String generateRandomAccountNumber() {
         Random random = new Random();
@@ -87,6 +83,4 @@ public class WalletServiceImpl implements WalletService {
         }
         return accountNumber.toString();
     }
-
-
 }

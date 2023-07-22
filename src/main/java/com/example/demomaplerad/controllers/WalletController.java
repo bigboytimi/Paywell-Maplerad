@@ -21,8 +21,4 @@ public class WalletController {
         GlobalResponse<CreditResponse> response = new GlobalResponse<>(walletService.creditWallet(request, walletId));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
-
-
-
 }
