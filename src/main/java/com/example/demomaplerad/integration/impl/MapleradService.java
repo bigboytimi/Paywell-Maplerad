@@ -2,6 +2,7 @@ package com.example.demomaplerad.integration.impl;
 
 import com.example.demomaplerad.integration.CardService;
 import com.example.demomaplerad.integration.CustomerService;
+import com.example.demomaplerad.integration.payload.StatusResponse;
 import com.example.demomaplerad.integration.payload.requests.Card;
 import com.example.demomaplerad.integration.payload.requests.Registration;
 import com.example.demomaplerad.integration.payload.response.CardResponse;
@@ -36,8 +37,9 @@ public class MapleradService implements CardService, CustomerService {
     }
 
     @Override
-    public String freezeCard(String cardId) {
-        return null;
+    public StatusResponse freezeCard(String cardId) {
+        String url = "https://sandbox.api.maplerad.com/v1/issuing/"+cardId+"freeze";
+        return apiConnection.connectAndGet(url, HttpMethod.PATCH, StatusResponse.class);
     }
 
     @Override

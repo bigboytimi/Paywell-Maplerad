@@ -46,5 +46,4 @@ public class VirtualCard extends AbstractBaseEntity<Long>{
     private User user;
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
     private List<Transaction> transactions;
-
 }

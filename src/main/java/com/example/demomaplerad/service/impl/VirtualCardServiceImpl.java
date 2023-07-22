@@ -2,10 +2,12 @@ package com.example.demomaplerad.service.impl;
 
 import com.example.demomaplerad.dto.request.CardFundRequest;
 import com.example.demomaplerad.dto.request.VirtualCardRequest;
+import com.example.demomaplerad.dto.response.CardStatusResponse;
 import com.example.demomaplerad.dto.response.CardFundResponse;
 import com.example.demomaplerad.dto.response.VirtualCardResponse;
 import com.example.demomaplerad.exceptions.*;
 import com.example.demomaplerad.integration.impl.MapleradService;
+import com.example.demomaplerad.integration.payload.StatusResponse;
 import com.example.demomaplerad.integration.payload.requests.Card;
 import com.example.demomaplerad.integration.payload.response.CardResponse;
 import com.example.demomaplerad.model.Transaction;
@@ -20,10 +22,9 @@ import com.example.demomaplerad.repository.CustomerRepository;
 import com.example.demomaplerad.repository.TransactionRepository;
 import com.example.demomaplerad.repository.VirtualCardRepository;
 import com.example.demomaplerad.repository.WalletRepository;
-import com.example.demomaplerad.security.CustomUserDetails;
 import com.example.demomaplerad.service.VirtualCardService;
+import com.example.demomaplerad.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -40,9 +41,7 @@ public class VirtualCardServiceImpl implements VirtualCardService {
     private final MapleradService mapleradService;
     @Override
     public VirtualCardResponse createCardRequest(VirtualCardRequest request) {
-        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        String authenticatedUserEmail = userDetails.getEmail();
+        String authenticatedUserEmail = SecurityUtils.getUserEmail();
 
         User user = customerRepository.findByEmail(authenticatedUserEmail)
                 .orElseThrow(()-> new UserNotFoundException("User not found"));
@@ -100,11 +99,7 @@ public class VirtualCardServiceImpl implements VirtualCardService {
 
     @Override
     public CardFundResponse fundCard(Long cardId, CardFundRequest request) {
-        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal();
-
-        String authUserEmail = userDetails.getEmail();
+        String authUserEmail = SecurityUtils.getUserEmail();
 
         User user = customerRepository.findByEmail(authUserEmail).orElseThrow(()-> new UserNotFoundException("User not found"));
 
@@ -148,5 +143,40 @@ public class VirtualCardServiceImpl implements VirtualCardService {
                 .issuer(savedCard.getIssuer())
                 .type(savedCard.getType())
                 .build();
+    }
+
+    @Override
+    public CardStatusResponse freezeCardReq(Long cardId) {
+        String userEmail = SecurityUtils.getUserEmail();
+
+        User user = customerRepository.findByEmail(userEmail).orElseThrow(()-> new UserNotFoundException("User not found"));
+
+        VirtualCard card = cardRepository.findById(cardId).orElseThrow(() -> new CardNotFoundException("Card not found"));
+
+        if(!card.getUser().equals(user)){
+            throw new UserNotFoundException("Card belongs to another user");
+        }
+
+        StatusResponse response = mapleradService.freezeCard(card.getAssigned_id());
+
+        if(response.getMessage().equals("Successfully disabled card")){
+            card.setDisabled(true);
+
+            VirtualCard updatedVirtualCard = cardRepository.save(card);
+
+            return CardStatusResponse.builder()
+                    .status("Card successfully disabled")
+                    .currency(updatedVirtualCard.getCurrency())
+                    .id(updatedVirtualCard.getId())
+                    .isDisabled(updatedVirtualCard.isDisabled())
+                    .issuer(updatedVirtualCard.getIssuer())
+                    .type(updatedVirtualCard.getType())
+                    .build();
+
+        } else {
+            throw new CardNotDisabledException("Request to disable card failed");
+        }
+
+
     }
 }
