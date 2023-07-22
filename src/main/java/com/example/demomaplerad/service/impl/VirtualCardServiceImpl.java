@@ -41,9 +41,9 @@ public class VirtualCardServiceImpl implements VirtualCardService {
     private final MapleradService mapleradService;
     @Override
     public VirtualCardResponse createCardRequest(VirtualCardRequest request) {
-        String authenticatedUserEmail = SecurityUtils.getUserEmail();
+        String userEmail = SecurityUtils.getUserEmail();
 
-        User user = customerRepository.findByEmail(authenticatedUserEmail)
+        User user = customerRepository.findByEmail(userEmail)
                 .orElseThrow(()-> new UserNotFoundException("User not found"));
 
         if(walletRepository.existsByCustomerAndCurrency(user, request.getCurrency())){
@@ -99,9 +99,10 @@ public class VirtualCardServiceImpl implements VirtualCardService {
 
     @Override
     public CardFundResponse fundCard(Long cardId, CardFundRequest request) {
-        String authUserEmail = SecurityUtils.getUserEmail();
+        String userEmail = SecurityUtils.getUserEmail();
 
-        User user = customerRepository.findByEmail(authUserEmail).orElseThrow(()-> new UserNotFoundException("User not found"));
+
+        User user = customerRepository.findByEmail(userEmail).orElseThrow(()-> new UserNotFoundException("User not found"));
 
 
         VirtualCard card = cardRepository.findById(cardId).orElseThrow(()-> new WalletNotFoundException("Wallet does not exist"));
@@ -174,9 +175,40 @@ public class VirtualCardServiceImpl implements VirtualCardService {
                     .build();
 
         } else {
-            throw new CardNotDisabledException("Request to disable card failed");
+            throw new CardRequestFailedException("Request to disable card failed");
+        }
+    }
+
+    @Override
+    public CardStatusResponse unfreezeCardReq(Long cardId) {
+        String userEmail = SecurityUtils.getUserEmail();
+
+        User user = customerRepository.findByEmail(userEmail).orElseThrow(()-> new UserNotFoundException("User not found"));
+
+        VirtualCard card = cardRepository.findById(cardId).orElseThrow(() -> new CardNotFoundException("Card not found"));
+
+        if(!card.getUser().equals(user)){
+            throw new UserNotFoundException("Card belongs to another user");
         }
 
+        StatusResponse statusResponse = mapleradService.unfreezeCard(card.getAssigned_id());
 
+        if (statusResponse.getMessage().equals("Successfully enabled card")){
+            card.setDisabled(true);
+
+            VirtualCard updatedVirtualCard = cardRepository.save(card);
+
+
+            return CardStatusResponse.builder()
+                    .status("Card successfully enabled")
+                    .currency(updatedVirtualCard.getCurrency())
+                    .id(updatedVirtualCard.getId())
+                    .isDisabled(updatedVirtualCard.isDisabled())
+                    .issuer(updatedVirtualCard.getIssuer())
+                    .type(updatedVirtualCard.getType())
+                    .build();
+        } else{
+            throw new CardRequestFailedException("Request to enable card failed");
+        }
     }
 }

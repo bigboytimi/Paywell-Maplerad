@@ -2,6 +2,7 @@ package com.example.demomaplerad.util;
 
 import com.example.demomaplerad.security.CustomUserDetails;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 
 public class SecurityUtils {
 

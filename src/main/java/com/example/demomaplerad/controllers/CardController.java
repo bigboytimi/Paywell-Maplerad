@@ -31,6 +31,10 @@ public class CardController {
         return new ResponseEntity<>(virtualCardService.freezeCardReq(cardId), HttpStatus.OK);
     }
 
+    @PatchMapping(value = "/unfreeze/{cardId}")
+    public ResponseEntity<CardStatusResponse> unfreezeCard(@PathVariable Long cardId){
+        return new ResponseEntity<>(virtualCardService.unfreezeCardReq(cardId), HttpStatus.OK);
+    }
 
 
 }

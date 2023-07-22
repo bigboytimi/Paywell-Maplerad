@@ -9,5 +9,5 @@ import org.springframework.stereotype.Service;
 public interface CardService {
     CardResponse createCard(Card request);
     StatusResponse freezeCard(String cardId);
-    String unfreezeCard(String cardId);
+    StatusResponse unfreezeCard(String cardId);
 }

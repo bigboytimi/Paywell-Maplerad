@@ -38,12 +38,13 @@ public class MapleradService implements CardService, CustomerService {
 
     @Override
     public StatusResponse freezeCard(String cardId) {
-        String url = "https://sandbox.api.maplerad.com/v1/issuing/"+cardId+"freeze";
+        String url = "https://sandbox.api.maplerad.com/v1/issuing/"+cardId+"/freeze";
         return apiConnection.connectAndGet(url, HttpMethod.PATCH, StatusResponse.class);
     }
 
     @Override
-    public String unfreezeCard(String cardId) {
-        return null;
+    public StatusResponse unfreezeCard(String cardId) {
+        String url = "https://sandbox.api.maplerad.com/v1/issuing/"+cardId+"/unfreeze";
+        return apiConnection.connectAndGet(url, HttpMethod.PATCH, StatusResponse.class);
     }
 }

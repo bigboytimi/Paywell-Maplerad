@@ -15,4 +15,6 @@ public interface VirtualCardService {
     CardFundResponse fundCard(Long cardId, CardFundRequest request);
 
     CardStatusResponse freezeCardReq(Long cardId);
+
+    CardStatusResponse unfreezeCardReq(Long cardId);
 }
