@@ -72,6 +72,26 @@ public class GlobalExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = EventExistsException.class)
+    public ResponseEntity<ErrorResponse> handleEventsExistsException(EventExistsException ex) {
+        ErrorResponse response = new ErrorResponse();
+        response.setErrorCode(HttpStatus.BAD_REQUEST.value());
+        response.setTimestamp(LocalDate.now());
+        response.setResponse(ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = InvalidWebhookException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidWebhookException(InvalidWebhookException ex) {
+        ErrorResponse response = new ErrorResponse();
+        response.setErrorCode(HttpStatus.BAD_REQUEST.value());
+        response.setTimestamp(LocalDate.now());
+        response.setResponse(ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = JwtExpiredTokenException.class)
     public ResponseEntity<ErrorResponse> handleJwtExpiredTokenException(JwtExpiredTokenException ex) {
         ErrorResponse response = new ErrorResponse();
