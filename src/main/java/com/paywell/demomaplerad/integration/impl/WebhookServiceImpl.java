@@ -33,26 +33,16 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class WebhookServiceImpl implements WebhookService {
-    private final WebhookUtils webhookUtils;
-    private final ObjectMapper objectMapper;
+
     private final EventRepository eventRepository;
+    private final WebhookUtils webhookUtils;
     Gson gson = GsonSingleton.getInstance();
     @Override
     public void receiveEvents(HttpServletRequest request, Object eventPayload) {
 
-        String svixId = request.getHeader("svix-id");
-
-        String svixTimestamp = request.getHeader("svix-timestamp");
-
-        List<String> svixSignature = Collections.singletonList(request.getHeader("svix-signature"));
-
-
         String webhook = gson.toJson(eventPayload);
 
-        String signature = WebhookUtils.getSignature(svixId, svixTimestamp, webhook);
-
-        boolean signatureMatch = WebhookUtils.isSignatureMatching(svixSignature, signature);
-
+        boolean signatureMatch = webhookUtils.verifySignatureMatch(request, eventPayload);
 
         if (!signatureMatch) {
             throw new InvalidWebhookException("The webhook is not from a reliable source");

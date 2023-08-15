@@ -1,6 +1,7 @@
 package com.paywell.demomaplerad.util;
 
 import com.google.gson.Gson;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -11,6 +12,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -98,4 +100,20 @@ public class WebhookUtils {
             throw new RuntimeException(e);
         }
     }
+
+    public boolean verifySignatureMatch(HttpServletRequest request, Object eventPayload){
+        String svixId = request.getHeader("svix-id");
+
+        String svixTimestamp = request.getHeader("svix-timestamp");
+
+        List<String> svixSignature = Collections.singletonList(request.getHeader("svix-signature"));
+
+
+        String webhook = gson.toJson(eventPayload);
+
+        String signature = getSignature(svixId, svixTimestamp, webhook);
+
+        return isSignatureMatching(svixSignature, signature);
+    }
+
 }
