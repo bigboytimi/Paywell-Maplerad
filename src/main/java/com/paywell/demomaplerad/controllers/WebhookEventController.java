@@ -21,15 +21,9 @@ import java.net.http.HttpHeaders;
 @RequiredArgsConstructor
 @RequestMapping("/api.paywell.com")
 public class WebhookEventController {
-
     private final WebhookService eventService;
-    Gson gson = GsonSingleton.getInstance();
-
     @PostMapping("/webhook")
     public ResponseEntity<?> consumeEvents(HttpServletRequest request, @RequestBody Object eventPayload){
-        /*
-        receive and process webhook from maplerad
-         */
         eventService.receiveEvents(request, eventPayload);
         return new ResponseEntity<>(HttpStatus.OK);
     }
