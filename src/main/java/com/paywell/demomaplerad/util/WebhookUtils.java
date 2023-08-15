@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
@@ -74,7 +73,7 @@ public class WebhookUtils {
         return Base64.getDecoder().decode(secretKey);
     }
 
-    public static String getSignature(String svixId, String svixTimestamp, String body){
+    public static String getWebhookSignature(String svixId, String svixTimestamp, String body){
 
         String signedContent = svixId.concat(".").concat(svixTimestamp).concat(".").concat(body);
 
@@ -111,9 +110,9 @@ public class WebhookUtils {
 
         String webhook = gson.toJson(eventPayload);
 
-        String signature = getSignature(svixId, svixTimestamp, webhook);
+        String webhookSignature = getWebhookSignature(svixId, svixTimestamp, webhook);
 
-        return isSignatureMatching(svixSignature, signature);
+        return isSignatureMatching(svixSignature, webhookSignature);
     }
 
 }
