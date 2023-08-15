@@ -1,8 +1,5 @@
 package com.paywell.demomaplerad.integration.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.paywell.demomaplerad.dto.webhooks.FailedCardCreationWebhook;
@@ -18,15 +15,9 @@ import com.paywell.demomaplerad.util.WebhookUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
-import java.util.Collections;
-import java.util.List;
-
-
 
 
 @Service
@@ -42,7 +33,7 @@ public class WebhookServiceImpl implements WebhookService {
 
         String webhook = gson.toJson(eventPayload);
 
-        boolean signatureMatch = webhookUtils.verifySignatureMatch(request, eventPayload);
+        boolean signatureMatch = webhookUtils.verifySignatureMatch(request, webhook);
 
         if (!signatureMatch) {
             throw new InvalidWebhookException("The webhook is not from a reliable source");
@@ -115,7 +106,7 @@ public class WebhookServiceImpl implements WebhookService {
 
     @Override
     public boolean isEventProcessed(String reference) {
-        Event event = eventRepository.findByReferenceId(reference);
+        Event event = eventRepository.findByReference(reference);
         return event != null;
     }
 

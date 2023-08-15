@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
@@ -17,6 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
+@Component
 public class WebhookUtils {
 
     @Value("${webhook.secret-key}")
@@ -100,7 +103,7 @@ public class WebhookUtils {
         }
     }
 
-    public boolean verifySignatureMatch(HttpServletRequest request, Object eventPayload){
+    public boolean verifySignatureMatch(HttpServletRequest request, String mapleradWebhook){
         String svixId = request.getHeader("svix-id");
 
         String svixTimestamp = request.getHeader("svix-timestamp");
@@ -108,9 +111,7 @@ public class WebhookUtils {
         List<String> svixSignature = Collections.singletonList(request.getHeader("svix-signature"));
 
 
-        String webhook = gson.toJson(eventPayload);
-
-        String webhookSignature = getWebhookSignature(svixId, svixTimestamp, webhook);
+        String webhookSignature = getWebhookSignature(svixId, svixTimestamp, mapleradWebhook);
 
         return isSignatureMatching(svixSignature, webhookSignature);
     }
