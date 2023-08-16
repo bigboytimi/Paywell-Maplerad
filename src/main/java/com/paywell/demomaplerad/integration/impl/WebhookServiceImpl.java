@@ -26,14 +26,13 @@ import java.lang.reflect.Type;
 public class WebhookServiceImpl implements WebhookService {
 
     private final EventRepository eventRepository;
-    private final WebhookUtils webhookUtils;
     Gson gson = GsonSingleton.getInstance();
     @Override
     public void receiveEvents(HttpServletRequest request, Object eventPayload) {
 
         String webhook = gson.toJson(eventPayload);
 
-        boolean signatureMatch = webhookUtils.verifySignatureMatch(request, webhook);
+        boolean signatureMatch = WebhookUtils.verifySignatureMatch(request, webhook);
 
         if (!signatureMatch) {
             throw new InvalidWebhookException("The webhook is not from a reliable source");

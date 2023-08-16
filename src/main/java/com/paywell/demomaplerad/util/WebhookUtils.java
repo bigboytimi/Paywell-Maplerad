@@ -19,13 +19,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
-@Component
 public class WebhookUtils {
 
     @Value("${webhook.secret-key}")
     private static String webhookSecretKey;
 
-    Gson gson = GsonSingleton.getInstance();
     private static final String PREFIX = "v1,";
     private static final String DELIMITER = "[,;:\\s/]+";
 
@@ -59,7 +57,7 @@ public class WebhookUtils {
         return result == 0;
     }
 
-    private static String removePrefixAndDelimiter(String signature) {
+    public static String removePrefixAndDelimiter(String signature) {
         if (signature.startsWith(PREFIX)){
             signature = signature.substring(PREFIX.length());
         }
@@ -103,7 +101,7 @@ public class WebhookUtils {
         }
     }
 
-    public boolean verifySignatureMatch(HttpServletRequest request, String mapleradWebhook){
+    public static boolean verifySignatureMatch(HttpServletRequest request, String mapleradWebhook){
         String svixId = request.getHeader("svix-id");
 
         String svixTimestamp = request.getHeader("svix-timestamp");

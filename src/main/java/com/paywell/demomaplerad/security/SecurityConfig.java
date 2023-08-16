@@ -1,7 +1,6 @@
 package com.paywell.demomaplerad.security;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -21,11 +21,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    @Autowired
-    private CustomUserDetailsService userDetailsService;
+
+    private final CustomUserDetailsService userDetailsService;
 
     private final AuthEntryPointJwt unauthorizedHandler;
     private final JwtUtils jwtUtils;
+
+
 
     @Bean
     public AuthTokenFilter authenticationTokenFilter(){
@@ -35,12 +37,17 @@ public class SecurityConfig {
     @Bean
     public DaoAuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
 
         return authProvider;
     }
 
+    @Bean
+    public AuthorizedIpSecurity ipSecurity(){
+        return new AuthorizedIpSecurity();
+    }
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
@@ -56,10 +63,13 @@ public class SecurityConfig {
         http.cors().and().csrf().disable()
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/api.paywell.com/webhook")
+                .access(new WebExpressionAuthorizationManager("@ipSecurity.check(authentication, request)")))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/v1/auth/**").permitAll()
                                 .anyRequest().authenticated()
                 );
+
 
         http.authenticationProvider(authenticationProvider());
 
