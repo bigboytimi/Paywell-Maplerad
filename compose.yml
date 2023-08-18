@@ -1,0 +1,25 @@
+version: '2'
+
+services:
+  db:
+    image: 'postgres:13.1-alpine'
+    container_name: paywell-db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=rootUser101
+
+  app:
+    image: 'paywell-app:latest'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    container_name: app
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://paywell-db:5432/paywell-db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: rootUser101
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create

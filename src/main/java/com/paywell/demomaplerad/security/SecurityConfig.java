@@ -63,7 +63,8 @@ public class SecurityConfig {
         http.cors().and().csrf().disable()
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/api.paywell.com/webhook")
+                .authorizeHttpRequests(auth ->
+                        auth.requestMatchers("/api.paywell.com/webhook")
                 .access(new WebExpressionAuthorizationManager("@ipSecurity.check(authentication, request)")))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/v1/auth/**").permitAll()
