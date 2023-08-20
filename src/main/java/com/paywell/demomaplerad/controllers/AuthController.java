@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
-    private final CustomerRepository customerRepository;
+
     private final SignupService signupService;
 
     @PostMapping("/signup")
