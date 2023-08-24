@@ -22,6 +22,10 @@ public class AuthorizedIpSecurity {
             "52.24.126.164",
             "54.148.139.208"
     };
+
+    /*
+    Check incoming IPs and confirm that it is allowed
+     */
     public boolean check(Authentication authentication, HttpServletRequest request){
         WebAuthenticationDetails webAuthenticationDetails = (WebAuthenticationDetails) authentication.getPrincipal();
         String userIp = webAuthenticationDetails.getRemoteAddress();

@@ -32,7 +32,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
 
-
+        /*
+        Checks if access token received matches the one provided and set authentication
+         */
         try {
             String jwt = parseJwt(request);
             log.info("Token number is : " + jwt);
@@ -55,6 +57,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
+    /*
+    Extracts access token from request
+     */
     private String parseJwt(HttpServletRequest request) {
         String headerAuth = request.getHeader("Authorization");
 
