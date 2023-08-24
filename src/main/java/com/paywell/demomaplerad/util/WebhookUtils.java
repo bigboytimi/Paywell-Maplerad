@@ -75,18 +75,30 @@ public class WebhookUtils {
     }
 
     public static String getWebhookSignature(String svixId, String svixTimestamp, String body){
-
+        /*
+        Form a signed content by combining the svix-signature, svix-timestamp and post body
+         */
         String signedContent = svixId.concat(".").concat(svixTimestamp).concat(".").concat(body);
 
+        /*
+        Split the prefix from secret key and convert to base64 as required by maplerad
+         */
         String keyWithoutPrefix = webhookSecretKey.split("_")[1];
 
         byte[] secretKeyInBytes = convertKeyToBase64(keyWithoutPrefix);
 
+        /*
+        Decode the signature from base 64 and the signed content using Hmac
+         */
         return createSignature(secretKeyInBytes, signedContent);
     }
 
 
     public static String createSignature(byte [] secretKeyInBytes, String signedContent) {
+
+        /*
+        Decode/form a signature string from the secret key and signedContent using Hmac
+         */
         try {
             Mac hmacSha256 = Mac.getInstance("HmacSHA256");
             SecretKeySpec secretKeySpec = new SecretKeySpec(secretKeyInBytes, "HmacSHA256");
@@ -102,15 +114,23 @@ public class WebhookUtils {
     }
 
     public static boolean verifySignatureMatch(HttpServletRequest request, String mapleradWebhook){
+        /*
+        Gets the necessary header values from the request
+         */
         String svixId = request.getHeader("svix-id");
 
         String svixTimestamp = request.getHeader("svix-timestamp");
 
         List<String> svixSignature = Collections.singletonList(request.getHeader("svix-signature"));
 
-
+        /*
+        Get a signature from the (headers and body), to be compared with the svix-signature
+         */
         String webhookSignature = getWebhookSignature(svixId, svixTimestamp, mapleradWebhook);
 
+        /*
+        Verify that the signature is matching, returns a boolean
+         */
         return isSignatureMatching(svixSignature, webhookSignature);
     }
 

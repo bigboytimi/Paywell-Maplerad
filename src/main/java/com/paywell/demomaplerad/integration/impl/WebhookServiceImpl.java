@@ -34,6 +34,9 @@ public class WebhookServiceImpl implements WebhookService {
          */
         String webhook = gson.toJson(eventPayload);
 
+        /*
+        First check: Verify that the signature
+         */
         boolean signatureMatch = WebhookUtils.verifySignatureMatch(request, webhook);
 
         if (!signatureMatch) {
