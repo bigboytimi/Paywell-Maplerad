@@ -51,15 +51,24 @@ public class SignupServiceImpl implements SignupService {
     private final AuthenticationManager authenticationManager;
     @Override
     public SignupResponse registerNewCustomer(SignupRequest request) throws EmailExistsException {
+
+        /*
+        Verify if customer exists in the database
+         */
         if(customerRepository.existsByEmail(request.getEmail())){
             throw new EmailExistsException("Customer with email already exists");
         }
 
+        /*
+        Build a Registration Payload for Maplerad Customer sign up
+         */
+
         Registration registration = modelBuilder.buildRegistrationPayload(request);
 
+        /*
+        Register User with Maplerad and save user to database
+         */
         RegistrationResponse response = customerService.registerUser(registration);
-
-//        User user = modelBuilder.buildUserEntity(request, response);
 
         User user = User.builder()
                 .user_id(response.getId())
@@ -78,6 +87,9 @@ public class SignupServiceImpl implements SignupService {
 
         User savedUser = customerRepository.save(user);
 
+        /*
+        Create a USD and NGN wallet account for user
+         */
 
         List<Wallet> userWallet = new ArrayList<>();
 
@@ -87,7 +99,9 @@ public class SignupServiceImpl implements SignupService {
         userWallet.add(usdWallet);
         userWallet.add(nairaWallet);
 
-
+        /*
+        Return Registration Response containing User and wallet info
+         */
         return modelBuilder.buildSignupResponse(user, userWallet);
     }
 
@@ -109,9 +123,15 @@ public class SignupServiceImpl implements SignupService {
 
     @Override
     public LoginResponse loginUser(LoginRequest request) {
+        /*
+        Verify that the user requesting to log in is an existing user
+         */
         User user = customerRepository.findByEmail(request.getEmail())
                 .orElseThrow(()->new UserNotFoundException("Invalid: User does not exist"));
 
+        /*
+        Check if provided password matches with user's password
+         */
         if(encoder.matches(request.getPassword(), user.getPassword())) {
 
 
