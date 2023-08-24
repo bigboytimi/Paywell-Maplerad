@@ -22,6 +22,9 @@ public class JwtUtils {
     @Value("${jwt.expiration}")
     private int jwtExpirationMs;
 
+    /*
+    Generate Access Jwt Token
+     */
     public String generateJwtToken(Authentication authentication) {
 
         CustomUserDetails userPrincipal = (CustomUserDetails) authentication.getPrincipal();
@@ -38,6 +41,9 @@ public class JwtUtils {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }
 
+    /*
+    Extracts user subject from JwtToken
+     */
     public String getUserNameFromJwtToken(String token) {
 
         return Jwts.parserBuilder().setSigningKey(key()).build()
@@ -45,6 +51,9 @@ public class JwtUtils {
     }
 
 
+    /*
+    Validate incoming Jwt Token
+     */
     public boolean validateJwtToken(String authToken) {
         log.info("Validating token: " + authToken);
         try {
