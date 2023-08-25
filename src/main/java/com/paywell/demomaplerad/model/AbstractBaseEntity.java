@@ -4,6 +4,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
@@ -14,6 +16,8 @@ import java.util.Objects;
 @ToString
 @MappedSuperclass
 @EnableJpaAuditing
+@Getter
+@Setter
 public abstract class AbstractBaseEntity<T extends Serializable> {
 
     private static final long serialVersionUID = -5554308939380869754L;

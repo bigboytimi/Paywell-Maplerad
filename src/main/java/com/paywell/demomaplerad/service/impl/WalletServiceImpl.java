@@ -39,12 +39,12 @@ public class WalletServiceImpl implements WalletService {
                 .ledgerBalance(BigDecimal.valueOf(0.0))
                 .isActive(false)
                 .isDisabled(false)
-                .customer(user)
+                .user(user)
                 .build());
     }
 
     @Override
-    public CreditResponse creditWallet(CreditWalletRequest request, String walletId) {
+    public CreditResponse creditWallet(CreditWalletRequest request, Long walletId) {
         CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         String authenticatedUserEmail = userDetails.getEmail();

@@ -17,7 +17,7 @@ public class WalletController {
     private final WalletService walletService;
 
     @PostMapping("/credit-from-wallet/{walletId}")
-    public ResponseEntity<GlobalResponse<CreditResponse>> creditWallet(@PathVariable String walletId, @RequestBody CreditWalletRequest request){
+    public ResponseEntity<GlobalResponse<CreditResponse>> creditWallet(@PathVariable Long walletId, @RequestBody CreditWalletRequest request){
         GlobalResponse<CreditResponse> response = new GlobalResponse<>(walletService.creditWallet(request, walletId));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

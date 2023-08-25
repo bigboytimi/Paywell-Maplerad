@@ -23,7 +23,7 @@ public class Event {
     @Column(name = "json_entity", columnDefinition = "json")
     private String eventBody;
     @CreationTimestamp
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
     @UpdateTimestamp
-    private LocalDateTime updated_at;
+    private LocalDateTime updatedAt;
 }

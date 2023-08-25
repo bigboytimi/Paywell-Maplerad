@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface WalletRepository extends JpaRepository<Wallet, String> {
+public interface WalletRepository extends JpaRepository<Wallet, Long> {
     Optional<Wallet> findWalletByCustomerAndCurrency(User user, Currency currency);
     boolean existsByCustomerAndCurrency(User customer, Currency currency);
 }

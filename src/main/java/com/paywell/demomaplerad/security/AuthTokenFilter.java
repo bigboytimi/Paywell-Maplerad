@@ -1,5 +1,6 @@
 package com.paywell.demomaplerad.security;
 
+import com.paywell.demomaplerad.exceptions.InvalidOrNullTokenException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -50,6 +51,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+            } else{
+                throw new InvalidOrNullTokenException("The token is null/invalid");
             }
         } catch (Exception ex) {
             log.error("Cannot set user authentication: " + ex);

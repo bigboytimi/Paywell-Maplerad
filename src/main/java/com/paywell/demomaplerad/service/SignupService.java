@@ -7,6 +7,5 @@ import com.paywell.demomaplerad.dto.response.SignupResponse;
 import com.paywell.demomaplerad.exceptions.EmailExistsException;
 
 public interface SignupService {
-    SignupResponse registerNewCustomer(SignupRequest request) throws EmailExistsException;
     LoginResponse loginUser(LoginRequest request);
 }

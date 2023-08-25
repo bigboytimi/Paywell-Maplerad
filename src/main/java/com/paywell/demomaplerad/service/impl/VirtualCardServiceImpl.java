@@ -40,6 +40,9 @@ public class VirtualCardServiceImpl implements VirtualCardService {
     private final MapleradService mapleradService;
     @Override
     public VirtualCardResponse createCardRequest(VirtualCardRequest request) {
+        /*
+        Get User email from Security context and confirm user is registered
+         */
         String userEmail = SecurityUtils.getUserEmail();
 
         User user = customerRepository.findByEmail(userEmail)
@@ -53,10 +56,11 @@ public class VirtualCardServiceImpl implements VirtualCardService {
                 .orElseThrow(()-> new NoWalletFoundException("Customer has no wallet for the specific currency"));
 
         Card card = Card.builder()
-                .name(user.getFirst_name().concat(" ").concat(user.getLast_name()))
+                .customer_id(user.getId())
                 .brand(request.getCardBrand())
+                .auto_approve(true)
                 .currency(request.getCurrency().name())
-                .amount(new BigDecimal(1000))
+                .amount(new BigDecimal(0))
                 .type(request.getCardType())
                 .build();
 
@@ -64,7 +68,7 @@ public class VirtualCardServiceImpl implements VirtualCardService {
         CardResponse cardResponse = mapleradService.createCard(card);
 
         VirtualCard savedVirtualCard = cardRepository.save(VirtualCard.builder()
-                .assigned_id(cardResponse.getId())
+                .assignedId(cardResponse.getId())
                 .cardName(cardResponse.getName())
                 .currency(Currency.valueOf(cardResponse.getCurrency()))
                 .cardNumber(cardResponse.getCard_number())
@@ -85,7 +89,7 @@ public class VirtualCardServiceImpl implements VirtualCardService {
 
         return VirtualCardResponse.builder()
                 .id(savedVirtualCard.getId())
-                .assigned_Id(savedVirtualCard.getAssigned_id())
+                .assigned_Id(savedVirtualCard.getAssignedId())
                 .cardOwnerName(savedVirtualCard.getCardName())
                 .cardNumber(savedVirtualCard.getCardNumber())
                 .cardCvv(savedVirtualCard.getCvv())
@@ -136,7 +140,7 @@ public class VirtualCardServiceImpl implements VirtualCardService {
         transactionRepository.save(transaction);
         return CardFundResponse.builder()
                 .id(savedCard.getId())
-                .assigned_cardId(savedCard.getAssigned_id())
+                .assigned_cardId(savedCard.getAssignedId())
                 .balance(savedCard.getBalance())
                 .currency(savedCard.getCurrency())
                 .isDisabled(false)
@@ -157,7 +161,7 @@ public class VirtualCardServiceImpl implements VirtualCardService {
             throw new UserNotFoundException("Card belongs to another user");
         }
 
-        StatusResponse response = mapleradService.freezeCard(card.getAssigned_id());
+        StatusResponse response = mapleradService.freezeCard(card.getAssignedId());
 
         if(response.getMessage().equals("Successfully disabled card")){
             card.setDisabled(true);
@@ -190,7 +194,7 @@ public class VirtualCardServiceImpl implements VirtualCardService {
             throw new UserNotFoundException("Card belongs to another user");
         }
 
-        StatusResponse statusResponse = mapleradService.unfreezeCard(card.getAssigned_id());
+        StatusResponse statusResponse = mapleradService.unfreezeCard(card.getAssignedId());
 
         if (statusResponse.getMessage().equals("Successfully enabled card")){
             card.setDisabled(true);

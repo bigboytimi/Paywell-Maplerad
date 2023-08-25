@@ -26,7 +26,7 @@ this class is used to hold and get data of an authenticated user from an Authent
 public class CustomUserDetails implements UserDetails {
     @Serial
     private static final long serialVersionUID = 1L;
-    private Long id;
+    private String id;
     private String username;
     private String email;
 
@@ -42,7 +42,7 @@ public class CustomUserDetails implements UserDetails {
 
         return new CustomUserDetails(
                 user.getId(),
-                user.getFirst_name() + " " + user.getLast_name(),
+                user.getFirstName() + " " + user.getLastName(),
                 user.getEmail(),
                 user.getPassword(),
                 authorities);

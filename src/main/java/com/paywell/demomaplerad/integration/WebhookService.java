@@ -4,10 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 public interface WebhookService {
 
-    void receiveEvents(HttpServletRequest request, Object eventPayload);
+    void receiveEvents(HttpServletRequest request, String eventPayload);
 
     boolean isEventProcessed(String id);
-
-
-
 }

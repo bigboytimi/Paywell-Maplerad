@@ -12,8 +12,10 @@ import java.math.BigDecimal;
 @Setter
 @Getter
 @Entity
-public class Wallet extends AbstractBaseEntity<Long>{
-
+public class Wallet{
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private String accountNumber;
     private BigDecimal ledgerBalance;
     private BigDecimal availableBalance;
@@ -22,7 +24,7 @@ public class Wallet extends AbstractBaseEntity<Long>{
     private boolean isDisabled;
     @Enumerated(EnumType.STRING)
     private Currency currency;
-    @OneToOne(mappedBy = "wallet")
+    @ManyToOne
     @JoinColumn(name = "customer_id")
-    private User customer;
+    private User user;
 }

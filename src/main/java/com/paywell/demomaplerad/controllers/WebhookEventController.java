@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class WebhookEventController {
     private final WebhookService webhookService;
     @PostMapping("/webhook")
-    public ResponseEntity<?> consumeEvents(HttpServletRequest request, @RequestBody Object eventPayload){
+    public ResponseEntity<?> consumeEvents(HttpServletRequest request, @RequestBody String eventPayload){
         webhookService.receiveEvents(request, eventPayload);
         return new ResponseEntity<>(HttpStatus.OK);
     }

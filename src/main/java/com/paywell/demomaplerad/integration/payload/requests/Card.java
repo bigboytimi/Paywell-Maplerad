@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @Builder
 @Data
 public class Card {
-    private String name;
+    private String customer_id;
     private String currency;
     private String type;
     private boolean auto_approve;

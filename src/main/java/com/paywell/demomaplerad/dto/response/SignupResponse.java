@@ -8,8 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SignupResponse {
-   private Long id;
-   private String customer_id;
+   private String id;
    private String name;
    private String status;
    private int tier;

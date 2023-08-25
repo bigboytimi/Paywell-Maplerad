@@ -32,6 +32,16 @@ public class GlobalExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = InvalidOrNullTokenException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidTokenException(InvalidOrNullTokenException ex) {
+        ErrorResponse response = new ErrorResponse();
+        response.setErrorCode(HttpStatus.BAD_REQUEST.value());
+        response.setTimestamp(LocalDate.now());
+        response.setResponse(ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = CardAlreadyExistsException.class)
     public ResponseEntity<ErrorResponse> handleCardExistsException(CardAlreadyExistsException ex) {
         ErrorResponse response = new ErrorResponse();

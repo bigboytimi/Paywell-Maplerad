@@ -18,7 +18,7 @@ import java.util.List;
 @Builder
 @Entity
 public class VirtualCard extends AbstractBaseEntity<Long>{
-    private String assigned_id;
+    private String assignedId;
     private String cardName;
     private String cardNumber;
     private String maskedPan;
@@ -34,7 +34,7 @@ public class VirtualCard extends AbstractBaseEntity<Long>{
     private LocalDateTime updatedAt;
     private boolean isDisabled;
     @Embedded
-    private BillingAddress address;
+    private Address address;
     private Integer cardPin;
     @Enumerated(EnumType.STRING)
     private CardBrand issuer;

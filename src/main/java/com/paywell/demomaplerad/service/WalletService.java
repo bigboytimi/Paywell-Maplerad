@@ -8,5 +8,5 @@ import com.paywell.demomaplerad.model.Wallet;
 public interface WalletService {
     public Wallet createWallet(User user, String walletType);
     public String generateRandomAccountNumber();
-    public CreditResponse creditWallet(CreditWalletRequest request, String walletId);
+    public CreditResponse creditWallet(CreditWalletRequest request, Long walletId);
 }

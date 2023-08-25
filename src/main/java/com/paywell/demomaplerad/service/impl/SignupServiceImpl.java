@@ -1,25 +1,20 @@
 package com.paywell.demomaplerad.service.impl;
 
 import com.paywell.demomaplerad.dto.request.LoginRequest;
-import com.paywell.demomaplerad.dto.request.SignupRequest;
 import com.paywell.demomaplerad.dto.response.LoginResponse;
-import com.paywell.demomaplerad.dto.response.SignupResponse;
-import com.paywell.demomaplerad.exceptions.EmailExistsException;
 import com.paywell.demomaplerad.exceptions.RoleNotFoundException;
 import com.paywell.demomaplerad.exceptions.UserNotFoundException;
 import com.paywell.demomaplerad.integration.CustomerService;
 import com.paywell.demomaplerad.model.Role;
 import com.paywell.demomaplerad.model.User;
-import com.paywell.demomaplerad.model.Wallet;
 import com.paywell.demomaplerad.model.enums.ERole;
-import com.paywell.demomaplerad.integration.payload.requests.Registration;
-import com.paywell.demomaplerad.integration.payload.response.RegistrationResponse;
 import com.paywell.demomaplerad.repository.CustomerRepository;
 import com.paywell.demomaplerad.repository.RoleRepository;
 import com.paywell.demomaplerad.security.CustomUserDetails;
 import com.paywell.demomaplerad.security.JwtUtils;
 import com.paywell.demomaplerad.service.SignupService;
 import com.paywell.demomaplerad.service.WalletService;
+import com.paywell.demomaplerad.util.BuilderUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,7 +25,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -40,86 +34,13 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class SignupServiceImpl implements SignupService {
     private final CustomerRepository customerRepository;
-    private final CustomerService customerService;
     private final PasswordEncoder encoder;
 
-    private final ModelBuilder modelBuilder;
-    private final WalletService walletService;
-    private final RoleRepository roleRepository;
+    private final BuilderUtils builderUtils;
+
 
     private final JwtUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
-    @Override
-    public SignupResponse registerNewCustomer(SignupRequest request) throws EmailExistsException {
-
-        /*
-        Verify if customer exists in the database
-         */
-        if(customerRepository.existsByEmail(request.getEmail())){
-            throw new EmailExistsException("Customer with email already exists");
-        }
-
-        /*
-        Build a Registration Payload for Maplerad Customer sign up
-         */
-
-        Registration registration = modelBuilder.buildRegistrationPayload(request);
-
-        /*
-        Register User with Maplerad and save user to database
-         */
-        RegistrationResponse response = customerService.registerUser(registration);
-
-        User user = User.builder()
-                .user_id(response.getId())
-                .first_name(response.getFirst_name())
-                .last_name(response.getLast_name())
-                .email(response.getEmail())
-                .country(response.getCountry())
-                .status(response.getStatus())
-                .tier(response.getTier())
-                .createdAt(response.getCreated_at())
-                .updatedAt(response.getUpdated_at())
-                .roles(getRole(request.getRole()))
-                .password(encoder.encode(request.getPassword()))
-                .build();
-
-
-        User savedUser = customerRepository.save(user);
-
-        /*
-        Create a USD and NGN wallet account for user
-         */
-
-        List<Wallet> userWallet = new ArrayList<>();
-
-        Wallet usdWallet = walletService.createWallet(savedUser, "USD");
-        Wallet nairaWallet = walletService.createWallet(savedUser, "NGN");
-
-        userWallet.add(usdWallet);
-        userWallet.add(nairaWallet);
-
-        /*
-        Return Registration Response containing User and wallet info
-         */
-        return modelBuilder.buildSignupResponse(user, userWallet);
-    }
-
-    private Set<Role> getRole(String role) {
-        Set<Role> roles = new HashSet<>();
-
-        if (role == null || role.equalsIgnoreCase("user")) {
-           Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                    .orElseThrow(() -> new RoleNotFoundException("Error: Role is not found"));
-           roles.add(userRole);
-
-        } else if (role.equalsIgnoreCase("admin")) {
-            Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                    .orElseThrow(() -> new RoleNotFoundException("Error: Role is not found"));
-            roles.add(adminRole);
-        }
-        return roles;
-    }
 
     @Override
     public LoginResponse loginUser(LoginRequest request) {
@@ -145,7 +66,7 @@ public class SignupServiceImpl implements SignupService {
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
             List<String> roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
 
-            return modelBuilder.buildLoginResponse(userDetails.getUsername(), jwt);
+            return builderUtils.buildLoginResponse(userDetails.getUsername(), jwt);
         } else {
             throw new UserNotFoundException("Invalid: Password is incorrect");
         }

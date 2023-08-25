@@ -1,4 +1,4 @@
-package com.paywell.demomaplerad.service.impl;
+package com.paywell.demomaplerad.util;
 
 import com.paywell.demomaplerad.dto.request.SignupRequest;
 import com.paywell.demomaplerad.dto.response.LoginResponse;
@@ -14,7 +14,7 @@ import java.util.*;
 
 @Component
 @RequiredArgsConstructor
-public class ModelBuilder {
+public class BuilderUtils {
 
     public Registration buildRegistrationPayload(SignupRequest request){
         return Registration.builder()
@@ -31,8 +31,7 @@ public class ModelBuilder {
 
         return SignupResponse.builder()
                 .id(user.getId())
-                .customer_id(user.getUser_id())
-                .name(user.getFirst_name() + " " + user.getLast_name())
+                .name(user.getFirstName() + " " + user.getLastName())
                 .status(user.getStatus())
                 .tier(user.getTier())
                 .walletDetails(buildWalletDetails(walletTypes)).build();

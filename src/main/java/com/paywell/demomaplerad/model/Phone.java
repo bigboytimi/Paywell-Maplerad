@@ -1,6 +1,7 @@
 package com.paywell.demomaplerad.model;
 
 
+import com.google.gson.annotations.SerializedName;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,6 +14,8 @@ import lombok.*;
 @NoArgsConstructor
 @Embeddable
 public class Phone {
-    private String phone_country_code;
-    private String phone_number;
+    @SerializedName("phone_country_code")
+    private String phoneCountryCode;
+    @SerializedName("phone_number")
+    private String phoneNumber;
 }

@@ -1,6 +1,6 @@
 package com.paywell.demomaplerad.integration.payload.response;
 
-import com.paywell.demomaplerad.model.BillingAddress;
+import com.paywell.demomaplerad.model.Address;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +27,7 @@ public class CardResponse {
     private BigDecimal balance;
     private String balance_updated_at;
     private boolean auto_approve;
-    private BillingAddress address;
+    private Address address;
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
 
