@@ -39,7 +39,7 @@ public class WalletServiceImpl implements WalletService {
                 .ledgerBalance(BigDecimal.valueOf(0.0))
                 .isActive(false)
                 .isDisabled(false)
-                .user(user)
+                .customer(user)
                 .build());
     }
 

@@ -25,6 +25,6 @@ public class Wallet{
     @Enumerated(EnumType.STRING)
     private Currency currency;
     @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private User user;
+    @JoinColumn(name = "user_id")
+    private User customer;
 }

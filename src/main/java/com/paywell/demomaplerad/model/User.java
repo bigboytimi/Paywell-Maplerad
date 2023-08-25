@@ -45,8 +45,7 @@ public class User extends AbstractBaseEntity<String> {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<VirtualCard> virtualCards;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER, orphanRemoval = true)
+    @Embedded
     private Address address;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL,

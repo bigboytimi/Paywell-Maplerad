@@ -125,7 +125,6 @@ public class CustomerEnrollmentServiceImpl implements CustomerEnrollmentService 
                     .city(request.getAddress().getCity())
                     .country(request.getAddress().getCountry())
                     .postalCode(request.getAddress().getPostal_code())
-                    .user(user)
                     .build();
 
             Phone phone = Phone.builder()
@@ -206,7 +205,6 @@ public class CustomerEnrollmentServiceImpl implements CustomerEnrollmentService 
                     .city(request.getAddress().getCity())
                     .street2(request.getAddress().getStreet2())
                     .street(request.getAddress().getStreet())
-                    .user(user)
                     .build();
 
             Identity identity = Identity.builder()
