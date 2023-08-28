@@ -1,12 +1,11 @@
 package com.paywell.demomaplerad.controllers;
 
-import com.paywell.demomaplerad.dto.request.FullCustomerEnrollRequest;
-import com.paywell.demomaplerad.dto.request.UpgradeCustomerTierOneRequest;
-import com.paywell.demomaplerad.dto.request.UpgradeCustomerTierTwoRequest;
-import com.paywell.demomaplerad.dto.response.TierOneUpgradeResponse;
+import com.paywell.demomaplerad.dto.request.*;
+import com.paywell.demomaplerad.dto.response.SignupResponse;
 import com.paywell.demomaplerad.dto.response.GlobalResponse;
 import com.paywell.demomaplerad.exceptions.EmailExistsException;
 import com.paywell.demomaplerad.service.CustomerEnrollmentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +18,12 @@ public class CustomerEnrollmentController {
 
     private final CustomerEnrollmentService customerEnrollmentService;
 
+
+    @PostMapping("/register-customer")
+    public ResponseEntity<SignupResponse> registerUser(@Valid @RequestBody SignupRequest request) throws EmailExistsException {
+        SignupResponse response = customerEnrollmentService.registerNewCustomer(request);
+        return ResponseEntity.ok(response);
+    }
     @PatchMapping("/upgrade-tier1")
     public ResponseEntity<GlobalResponse<String>> upgradeCustomerToTierOne(@RequestBody UpgradeCustomerTierOneRequest customerTierOneRequest) throws EmailExistsException {
         GlobalResponse<String> response = new GlobalResponse<>(customerEnrollmentService.upgradeToTierOne(customerTierOneRequest));

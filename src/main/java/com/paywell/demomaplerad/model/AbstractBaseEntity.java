@@ -3,10 +3,7 @@ package com.paywell.demomaplerad.model;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.io.Serializable;
