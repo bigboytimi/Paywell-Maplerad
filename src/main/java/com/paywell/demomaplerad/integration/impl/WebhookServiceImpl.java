@@ -29,7 +29,7 @@ public class WebhookServiceImpl implements WebhookService {
 
 
         /*
-        First check: Verify that the signature
+        First check: Verify the signature
          */
         boolean signatureMatch = WebhookUtils.verifySignatureMatch(request, eventPayload);
 
