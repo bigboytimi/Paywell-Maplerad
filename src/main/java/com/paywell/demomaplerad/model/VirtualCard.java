@@ -5,6 +5,8 @@ import com.paywell.demomaplerad.model.enums.CardType;
 import com.paywell.demomaplerad.model.enums.Currency;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -17,25 +19,27 @@ import java.util.List;
 @Setter
 @Builder
 @Entity
-public class VirtualCard extends AbstractBaseEntity<Long>{
-    private String assignedId;
+public class VirtualCard extends AbstractBaseEntity<String>{
+    private String reference;
     private String cardName;
     private String cardNumber;
     private String maskedPan;
     private String expiry;
-    private Integer cvv;
+    private String cvv;
     private String status;
     @Enumerated(EnumType.STRING)
     private Currency currency;
     @Enumerated(EnumType.STRING)
     private CardType type;
     private BigDecimal balance;
+    @CreationTimestamp
     private LocalDateTime createdAt;
+    @UpdateTimestamp
     private LocalDateTime updatedAt;
     private boolean isDisabled;
     @Embedded
     private Address address;
-    private Integer cardPin;
+    private String cardPin;
     @Enumerated(EnumType.STRING)
     private CardBrand issuer;
     @OneToOne(cascade = CascadeType.ALL)

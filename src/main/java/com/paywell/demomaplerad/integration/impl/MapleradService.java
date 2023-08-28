@@ -3,6 +3,8 @@ package com.paywell.demomaplerad.integration.impl;
 import com.paywell.demomaplerad.dto.request.FullCustomerEnrollRequest;
 import com.paywell.demomaplerad.dto.request.UpgradeCustomerTierOneRequest;
 import com.paywell.demomaplerad.dto.request.UpgradeCustomerTierTwoRequest;
+import com.paywell.demomaplerad.dto.response.CardCreationResponse;
+import com.paywell.demomaplerad.dto.response.CardDetailsResponse;
 import com.paywell.demomaplerad.dto.response.TierOneUpgradeResponse;
 import com.paywell.demomaplerad.dto.response.TierTwoUpgradeResponse;
 import com.paywell.demomaplerad.integration.CardService;
@@ -50,9 +52,9 @@ public class MapleradService implements CardService, CustomerService {
 
 
     @Override
-    public CardResponse createCard(Card request) {
+    public CardCreationResponse createCard(Card request) {
         String url = "https://sandbox.api.maplerad.com/v1/issuing";
-        return apiConnection.connectAndPost(request, url, HttpMethod.POST, MapleradCardResponse.class).getData();
+        return apiConnection.connectAndPost(request, url, HttpMethod.POST, CardCreationResponse.class);
     }
 
     @Override
@@ -65,5 +67,11 @@ public class MapleradService implements CardService, CustomerService {
     public StatusResponse unfreezeCard(String cardId) {
         String url = "https://sandbox.api.maplerad.com/v1/issuing/"+cardId+"/unfreeze";
         return apiConnection.connectAndGet(url, HttpMethod.PATCH, StatusResponse.class);
+    }
+
+    @Override
+    public CardDetailsResponse getCard(String id) {
+        String url = "https://sandbox.api.maplerad.com/v1/issuing/"+id;
+        return apiConnection.connectAndGet(url, HttpMethod.GET, CardDetailsResponse.class);
     }
 }

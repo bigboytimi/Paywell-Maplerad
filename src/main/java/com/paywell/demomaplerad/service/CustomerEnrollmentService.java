@@ -5,8 +5,6 @@ import com.paywell.demomaplerad.dto.request.SignupRequest;
 import com.paywell.demomaplerad.dto.request.UpgradeCustomerTierOneRequest;
 import com.paywell.demomaplerad.dto.request.UpgradeCustomerTierTwoRequest;
 import com.paywell.demomaplerad.dto.response.SignupResponse;
-import com.paywell.demomaplerad.dto.response.TierOneUpgradeResponse;
-import com.paywell.demomaplerad.dto.response.GlobalResponse;
 import com.paywell.demomaplerad.exceptions.EmailExistsException;
 
 public interface CustomerEnrollmentService {

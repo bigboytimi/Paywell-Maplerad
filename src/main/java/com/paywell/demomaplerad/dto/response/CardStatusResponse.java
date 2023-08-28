@@ -12,7 +12,7 @@ import lombok.*;
 @AllArgsConstructor
 public class CardStatusResponse {
 
-    private Long id;
+    private String id;
     private Currency currency;
     private CardType type;
     private CardBrand issuer;

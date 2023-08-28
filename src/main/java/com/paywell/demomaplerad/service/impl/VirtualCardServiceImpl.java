@@ -2,18 +2,12 @@ package com.paywell.demomaplerad.service.impl;
 
 import com.paywell.demomaplerad.dto.request.CardFundRequest;
 import com.paywell.demomaplerad.dto.request.VirtualCardRequest;
-import com.paywell.demomaplerad.dto.response.CardStatusResponse;
-import com.paywell.demomaplerad.dto.response.CardFundResponse;
-import com.paywell.demomaplerad.dto.response.VirtualCardResponse;
+import com.paywell.demomaplerad.dto.response.*;
 import com.paywell.demomaplerad.exceptions.*;
 import com.paywell.demomaplerad.integration.impl.MapleradService;
 import com.paywell.demomaplerad.integration.payload.response.StatusResponse;
 import com.paywell.demomaplerad.integration.payload.requests.Card;
-import com.paywell.demomaplerad.integration.payload.response.CardResponse;
-import com.paywell.demomaplerad.model.Transaction;
-import com.paywell.demomaplerad.model.User;
-import com.paywell.demomaplerad.model.VirtualCard;
-import com.paywell.demomaplerad.model.Wallet;
+import com.paywell.demomaplerad.model.*;
 import com.paywell.demomaplerad.model.enums.CardBrand;
 import com.paywell.demomaplerad.model.enums.CardType;
 import com.paywell.demomaplerad.model.enums.Currency;
@@ -25,6 +19,8 @@ import com.paywell.demomaplerad.repository.WalletRepository;
 import com.paywell.demomaplerad.service.VirtualCardService;
 import com.paywell.demomaplerad.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONObject;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -38,6 +34,8 @@ public class VirtualCardServiceImpl implements VirtualCardService {
     private final VirtualCardRepository cardRepository;
     private final TransactionRepository transactionRepository;
     private final MapleradService mapleradService;
+
+    private final PasswordEncoder encoder;
     @Override
     public VirtualCardResponse createCardRequest(VirtualCardRequest request) {
         /*
@@ -65,31 +63,48 @@ public class VirtualCardServiceImpl implements VirtualCardService {
                 .build();
 
 
-        CardResponse cardResponse = mapleradService.createCard(card);
+        CardCreationResponse response = mapleradService.createCard(card);
+
+        JSONObject jsonObject = new JSONObject(response);
+
+        String reference = jsonObject.getString("reference");
+
+        /*
+        Call Maplerad Service to get the card details
+         */
+
+        CardDetailsResponse cardDetails = mapleradService.getCard(reference);
+
+        Address address = Address.builder()
+                .street(cardDetails.getData().getAddress().getStreet())
+                .city(cardDetails.getData().getAddress().getCity())
+                .country(cardDetails.getData().getAddress().getCity())
+                .postalCode(cardDetails.getData().getAddress().getPostal_code())
+                .state(cardDetails.getData().getAddress().getState())
+                .build();
+
 
         VirtualCard savedVirtualCard = cardRepository.save(VirtualCard.builder()
-                .assignedId(cardResponse.getId())
-                .cardName(cardResponse.getName())
-                .currency(Currency.valueOf(cardResponse.getCurrency()))
-                .cardNumber(cardResponse.getCard_number())
-                .cardPin(request.getPin())
-                .createdAt(cardResponse.getCreated_at())
-                .updatedAt(cardResponse.getUpdated_at())
-                .address(cardResponse.getAddress())
-                .cvv(cardResponse.getCvv())
-                .balance(cardResponse.getBalance())
-                .expiry(cardResponse.getExpiry())
+                .reference(reference)
+                .cardName(cardDetails.getData().getName())
+                .currency(Currency.valueOf(cardDetails.getData().getCurrency()))
+                .cardNumber(cardDetails.getData().getCard_number())
+                .cardPin(encoder.encode(request.getPin()))
+                .address(address)
+                .cvv(cardDetails.getData().getCvv())
+                .balance(cardDetails.getData().getBalance())
+                .expiry(cardDetails.getData().getExpiry())
                 .wallet (wallet)
                 .isDisabled(false)
-                .type(CardType.valueOf(cardResponse.getType()))
-                .issuer(CardBrand.valueOf(cardResponse.getIssuer()))
-                .maskedPan(cardResponse.getMasked_pan())
+                .type(CardType.valueOf(cardDetails.getData().getType()))
+                .issuer(CardBrand.valueOf(cardDetails.getData().getIssuer()))
+                .maskedPan(cardDetails.getData().getMasked_pan())
                 .user(user)
                 .build());
-
+//
         return VirtualCardResponse.builder()
                 .id(savedVirtualCard.getId())
-                .assigned_Id(savedVirtualCard.getAssignedId())
+                .reference(savedVirtualCard.getReference())
                 .cardOwnerName(savedVirtualCard.getCardName())
                 .cardNumber(savedVirtualCard.getCardNumber())
                 .cardCvv(savedVirtualCard.getCvv())
@@ -101,7 +116,7 @@ public class VirtualCardServiceImpl implements VirtualCardService {
     }
 
     @Override
-    public CardFundResponse fundCard(Long cardId, CardFundRequest request) {
+    public CardFundResponse fundCard(String cardId, CardFundRequest request) {
         String userEmail = SecurityUtils.getUserEmail();
 
 
@@ -140,7 +155,7 @@ public class VirtualCardServiceImpl implements VirtualCardService {
         transactionRepository.save(transaction);
         return CardFundResponse.builder()
                 .id(savedCard.getId())
-                .assigned_cardId(savedCard.getAssignedId())
+                .assigned_cardId(savedCard.getReference())
                 .balance(savedCard.getBalance())
                 .currency(savedCard.getCurrency())
                 .isDisabled(false)
@@ -150,7 +165,7 @@ public class VirtualCardServiceImpl implements VirtualCardService {
     }
 
     @Override
-    public CardStatusResponse freezeCardReq(Long cardId) {
+    public CardStatusResponse freezeCardReq(String cardId) {
         String userEmail = SecurityUtils.getUserEmail();
 
         User user = customerRepository.findByEmail(userEmail).orElseThrow(()-> new UserNotFoundException("User not found"));
@@ -161,7 +176,7 @@ public class VirtualCardServiceImpl implements VirtualCardService {
             throw new UserNotFoundException("Card belongs to another user");
         }
 
-        StatusResponse response = mapleradService.freezeCard(card.getAssignedId());
+        StatusResponse response = mapleradService.freezeCard(card.getReference());
 
         if(response.getMessage().equals("Successfully disabled card")){
             card.setDisabled(true);
@@ -183,7 +198,7 @@ public class VirtualCardServiceImpl implements VirtualCardService {
     }
 
     @Override
-    public CardStatusResponse unfreezeCardReq(Long cardId) {
+    public CardStatusResponse unfreezeCardReq(String cardId) {
         String userEmail = SecurityUtils.getUserEmail();
 
         User user = customerRepository.findByEmail(userEmail).orElseThrow(()-> new UserNotFoundException("User not found"));
@@ -194,7 +209,7 @@ public class VirtualCardServiceImpl implements VirtualCardService {
             throw new UserNotFoundException("Card belongs to another user");
         }
 
-        StatusResponse statusResponse = mapleradService.unfreezeCard(card.getAssignedId());
+        StatusResponse statusResponse = mapleradService.unfreezeCard(card.getReference());
 
         if (statusResponse.getMessage().equals("Successfully enabled card")){
             card.setDisabled(true);
@@ -214,4 +229,25 @@ public class VirtualCardServiceImpl implements VirtualCardService {
             throw new CardRequestFailedException("Request to enable card failed");
         }
     }
+
+    @Override
+    public CardResponse getCard(String reference) {
+        String userEmail = SecurityUtils.getUserEmail();
+
+        User user = customerRepository.findByEmail(userEmail).orElseThrow(()-> new UserNotFoundException("User not found"));
+
+
+        CardDetailsResponse cardDetails = mapleradService.getCard(reference);
+        VirtualCard card = cardRepository.findById(cardDetails.getData().getId()).orElseThrow(() -> new CardNotFoundException("Card not found"));
+
+        if(!card.getUser().equals(user)){
+            throw new UserNotFoundException("Card belongs to another user");
+        }
+
+        if (!card.getReference().equals(reference)){
+            throw new CardRequestFailedException("This reference is invalid");
+        }
+        return cardDetails.getData();
+    }
+
 }

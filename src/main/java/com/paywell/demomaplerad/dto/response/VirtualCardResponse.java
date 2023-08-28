@@ -10,11 +10,11 @@ import java.math.BigDecimal;
 @Setter
 @Builder
 public class VirtualCardResponse {
-    private Long id;
-    private String assigned_Id;
+    private String id;
+    private String reference;
     private String cardOwnerName;
     private String cardNumber;
-    private Integer cardCvv;
+    private String cardCvv;
     private String cardType;
     private String cardBrand;
     private BigDecimal cardBalance;

@@ -1,12 +1,18 @@
 package com.paywell.demomaplerad.util;
 
 import com.paywell.demomaplerad.dto.request.SignupRequest;
+import com.paywell.demomaplerad.dto.response.CardDetailsResponse;
 import com.paywell.demomaplerad.dto.response.LoginResponse;
 import com.paywell.demomaplerad.dto.response.SignupResponse;
 import com.paywell.demomaplerad.dto.response.WalletDetails;
+import com.paywell.demomaplerad.model.Address;
 import com.paywell.demomaplerad.model.User;
+import com.paywell.demomaplerad.model.VirtualCard;
 import com.paywell.demomaplerad.model.Wallet;
 import com.paywell.demomaplerad.integration.payload.requests.Registration;
+import com.paywell.demomaplerad.model.enums.CardBrand;
+import com.paywell.demomaplerad.model.enums.CardType;
+import com.paywell.demomaplerad.model.enums.Currency;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import java.math.BigDecimal;

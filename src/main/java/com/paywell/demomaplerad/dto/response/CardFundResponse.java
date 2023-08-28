@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CardFundResponse {
-    private Long id;
+    private String id;
     private String assigned_cardId;
     private String expiry;
     private Currency currency;

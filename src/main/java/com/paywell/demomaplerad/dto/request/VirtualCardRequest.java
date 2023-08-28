@@ -19,5 +19,5 @@ public class VirtualCardRequest {
     private Currency currency;
     private String amount;
     @NotBlank(message = "Pin cannot be blank")
-    private Integer pin;
+    private String pin;
 }
